@@ -14,5 +14,5 @@ In this repository I:
 
 The following files in this repository are important for Assignment3
 
-- test.R is whre the data cleaning, merging, and most of the analysis takes place. It is dynamically linked inside FinalMarkDown.Rmd
+- test.R is where the data cleaning, merging, and most of the analysis takes place. It is dynamically linked inside FinalMarkDown.Rmd
 - Packages.B is a bibliographic file dynamically linked to FinalMarkDown.Rmd with citations for R and R packages.
