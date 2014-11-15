@@ -1,0 +1,243 @@
+---
+title: "Differences in Student Outcomes Between School Districts with Appointed Superintendents
+  Versus Districts with Elected Superintendents"
+author: "Owen Phillips"
+date: "November 14, 2014"
+output:
+  pdf_document:
+    highlight: zenburn
+    number_sections: yes
+    toc: TRUE
+    fig_width: 7
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+bibliography:
+- Packages.bib
+---
+
+
+```{r echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+
+#Set working directory. 
+setwd("~/Desktop/DataCollab/Assignment3")
+#Load packages and create BibTeX file
+PackagesUsed <- c("plyr", "ggplot2", "reshape", "psych", "epicalc", "dplyr", "car", "stargazer", "repmis")
+#Load PackagesUsed and create .bib BibTex file
+repmis::LoadandCite(PackagesUsed, file = "Packages.bib", install = FALSE)
+
+```
+
+```{r include=FALSE}
+source("~/Desktop/DataCollab/Assignment3/test.R")
+```
+
+
+
+# Background 
+
+My primary question is: Are there significant differences in student outcomes for school districts that have appointed or elected superintendents, controlling for demographic and socioeconomic variables at the district level? To answer this question I intend to utilize multiple regression analysis in order to properly compare school districts that have different demographic and socioeconomic characteristics.  
+
+
+# Data Gathering 
+
+This paper is a cross section analysis of data from the 2013-14 academic school year. The data used in this analysis is the most recently published by the Mississippi Department of Education (MDE). Most of the data collected come directly from the MDE Office of Research and Statistics [website]( http://ors.mde.k12.ms.us/). A small portion had to be obtained from the Office of Research and Statistics through [public records requests]( http://ors.mde.k12.ms.us/Form.aspx). Additionally, the [Mississippi Parents Campaign]( http://www.msparentscampaign.org/), the largest advocacy group supporting the abolishment of elected superintendents, provided the list of which districts have appointed or elected superintendents.  Lastly, socioeconomic data was obtained via the [United States Census](http://www.census.gov/did/www/schooldistricts/data/). Lastly,enrollment data and the student-to-teacher ratio was obtained from the [National Center for Education Statistics](http://nces.ed.gov/) website.  
+
+The way the data is formatted is rather straightforward. The common link across all data sources is name of the school district. Unfortunately, in some instances the names of school districts are spelled differently across datasets (i.e. Greenwood Municipal School District vs. Greenwood City School Dist.). However, examples of this are rare.  
+
+One of the challenges in working with this data is that it comes from multiple sources.  Normally when each observation (school district) is unique and formatted the same across all datasets, merging should be simple. However, in this case a few of the unique identifiers vary across datasets. In order to overcome this challenge I merged data sets according to the first 8 characters of each district name. This avoided the problem of districts that were labled differently (i.e. Greenwood Municipal School District vs. Greenwood City School Dist.). However, there were still two or three observations that required manual edits.  
+
+# Defining the Data
+
+```{r, echo=FALSE, results='asis', cache=TRUE}
+
+Variables <- c('Total Enrollment', 'Student-to-Teacher Ratio',  
+                'Poverty Percentage', 'Graduation Rates', 'SATPMean', 'Mean Algebra', 
+                'Mean Biology', 'Mean History', 'Mean English')
+Year <- c('2014', '2014','2012','2014','2014',
+          '2014', '2014', '2014', '2014')
+Source <- c('NCES', 'NCES', 'Census', 'MSDE', 'MSDE', 
+            'MSDE', 'MSDE', 'MSDE','MSDE')
+Explanation <- c('Total District Enrollment', 'Ratio of students to teachers in the district', 
+                 'Percent of 5-17 year olds in poverty in the district', 
+                 '2014 Graduation rate of the 2009 cohort', 
+                'Composite score of all SATP tests', 
+                 'Average Algebra II SATP Test Scores', 
+                 'Average Biology SATP Test Scores', 
+                 'Average History SATP Test Scores', 
+                 'Average English Test Scores')
+
+# Combine
+datatable <- data.frame(Variables, Explanation, Year, Source)
+library(knitr)
+knitr::kable(datatable)
+
+
+```
+
+
+The definitions of the variables used for this analysis are rather straightforward, regardless the following are formal definitions of the above variables and their justification for being included.  
+
+**Number.Enrolled**: A continuous variable corresponding to the total number of students enrolled in grades K-12 in each district. Larger districts may be more difficult to manage from the superintendent’s perspective. Meanwhile, smaller districts may have an especially small talent pool to choose a qualified superintendent from. Including this variable in the analysis may shed some light on these questions.   
+ 
+**StudentTeacherRatio**: The ratio of students to teachers in the district. Previous studies have shown that lowering the student-to-teacher ratio can improve student performance. 
+
+**Poverty Percentage**: A variable ranging from 0% to 100% that describes the percentage of 5-17 year olds in the district that live under the federal poverty line. It has been well documented that poverty is detrimental to student outcomes and thus PovertyPct will control for socioeconomic differences between districts.   
+
+**Graduation Rates**: The percentage of students that were freshmen in 2009 that graduated by 2014. This is effectively the 5-year graduation rate.   
+  
+**SATP Mean**: A composite scores of all SATP test scores. The average of the Algebra II, Biology, History, and English scores may be more insightful than any one particular test.  
+
+**Mean Algebra**: Average test scores on the Algebra II SATP state test. 
+
+**Mean Biology**: Average test scores on the Biology SATP state test. 
+
+**Mean History**: Average test scores on the History SATP state test. 
+
+**Mean English**: Average test scores on the English SATP state test. 
+
+# Descriptive Statistics  
+
+A table (Figure (1)) of descriptive statistics for all school districts in Mississippi is presented below. Although there are 151 school districts in Mississippi, some were omitted from this analysis due to inconsistent data recording or missing data all together.   
+
+
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+
+library(stargazer)
+stargazer(simpleclean, type='latex', digits = 1, header=FALSE, title = "Figure (1) Summary Stats for All Districts")
+
+```
+<br>  
+
+To begin, first examine the descriptive statistics for all school districts in Mississippi. Figure (1) shows that a typical school district in Mississippi has roughly 2,720 students enrolled, an average poverty percentage of about 35%, a 75% graduation rate, average scores on the SATP state test that vary between 647 (U.S. History) 655 (Algebra II), and on average approximately 15 students for every teacher in the district.      
+
+Things become more interesting when the descriptive statistics are broken down by whether the school district appoints or elects their superintendent. Figures (2) and (3) show the same summary statistics as Figure (1), but for districts with appointed and elected superintendents respectively.
+
+
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+
+stargazer(simpleappointed, type='latex', digits = 1, title = "Figure (2) Summary Stats for Appointed Districts", header = FALSE)  
+
+```
+<br>
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+stargazer(simpleelected, type='latex', digits = 1, title = "Figure (3) Summary Stats for Elected Districts", header = FALSE)  
+
+```
+<br>
+
+For the 78 appointed school districts, the average number of students enrolled is roughly 2,300 while the 67 elected school districts have an average nearly 900 higher. The difference in district enrollment can be explained by the fact that school districts with elected superintendents are shaped by county border. Meanwhile, school districts with appointed superintendents are shaped by municipal and city borders. Effectively were comparing the population in 67 municipalities versus 78 counties. Therefore it is not surprising that the average number of total enrolled students is substantially higher in elected school districts than in appointed school districts.   
+
+Similarly, the other noticeable difference between the two types of districts is the average percentage of 5-17 year-olds in poverty. In appointed districts, the average percentage of 5-17 year-olds in poverty is at 37%, meanwhile it is just below 33% in elected districts. However, this likely due to the fact that appointed districts are comprised of municipalities and urban areas where poverty is more prevalent. The differences in poverty levels can also be illustrated in a density plot of the distribution of poverty percentages by whether the district has an appointed or elected superintendent. In Figure (4), the distribution of poverty percentages are essentially normally distributed for both appointed and elected school districts, but appear to be more skewed leftward for districts with elected superintendents thus resulting in a lower average poverty percentage for those districts as compared to appointed districts.   
+<br>
+<br>
+```{r, results='asis', echo=FALSE}
+library(ggplot2)
+
+poverty <- ggplot(cleandata, aes(x = PovertyPct))
+poverty + geom_density(aes(fill=factor(AorE)), alpha= .75) + 
+ggtitle("Figure (4) Poverty Distribution")
+
+```
+<br>
+<br>
+
+In terms of student outcomes (graduation rates and SATP test scores), appointed and elected school districts are indistinguishable. Average graduation rates are within 0.6 percentage points of each other. Additionally, the biggest test score difference is in average English scores and that is only 0.6 points as well. 
+
+It may be easier to conceptualize the similarities between the two types of districts by examining density distributions of the aforementioned student outcomes. The following figures depict the density distributions for average Algebra II (Figure (5)), average Biology (Figure (6)), average English (Figure (7)), average History (Figure (8)), and average graduation rates (Figure (9)) for districts, delineated by whether they have an appointed or an elected superintendent. The distributions tell a fairly similar story to the descriptive statistics. At first glance, elected and appointed school districts are alike in regards to student outcomes. Considering the fact, it will be interesting to see whether this similarity holds after district characteristics (district enrollment, poverty, and student-to-teacher ratio) are controlled for. 
+<br>
+<br>
+```{r, results='asis', echo=FALSE}
+alg <- ggplot(enrollandsub, aes(x = MeanAlgebra))
+alg + geom_density(aes(fill=factor(AorE)), alpha =.75) + 
+ggtitle("Figure (5) Algebra II Distribution")
+```
+
+<br>
+<br>
+
+```{r, results='asis', echo=FALSE}
+bio <- ggplot(enrollandsub, aes(x = MeanBiology))
+bio + geom_density(aes(fill=factor(AorE)), alpha= .75) +
+ggtitle("Figure (6) Biology Distribution")
+
+```
+
+<br>
+<br>
+
+```{r, results='asis', echo=FALSE}
+eng <- ggplot(enrollandsub, aes(x = MeanEnglish))
+eng + geom_density(aes(fill=factor(AorE)), alpha= .75) +
+ggtitle("Figure (7) English Distribution")
+```
+
+<br>
+<br>
+
+```{r, results='asis', echo=FALSE}
+hist <- ggplot(enrollandsub, aes(x = MeanHistory))
+hist + geom_density(aes(fill=factor(AorE)), alpha= .75) +
+ggtitle("Figure (8) History Distribution")
+```
+
+<br>
+<br>
+
+```{r, results='asis', echo=FALSE} 
+gradrate <- ggplot(gg, aes(x = gradrate09))
+gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
+ggtitle("Figure (9) Graduation Rates Distribution")
+```
+<br>
+<br>
+
+# Regression Model 
+
+To assess the difference in student outcomes for the two types of districts I employed the use of regression analysis in order to control for certain observable characteristics that also impact student outcomes. The basic regression model is as follows: 
+
+**Y(i)[Student Outcome]** = **X0** + **X1(i)[Elected]** + **X2(i)[Total Enrollment]** + **X3(i)[Poverty Pct.]** + **X4(i)[Student-to-Teacher Ratio]** + **(X1(i) * X2(i))[Elected * Total Enrollment]**  + **Eo**
+
+Whereas **Y(i)[Student Outcome]** is the student outcome in the (i)th district. Student outcomes include the average Algebra II, Biology, U.S. History, and English SATP Test Scores in each district, a composite score of all SATP test scores in each district, and the 2009 cohort graduation rate; 
+
+Whereas **X1(i)[Elected]** is a dummy variable equal to 1 if the district has an elected superintendent;
+
+Whereas **X2(i)[Total Enrollment]** is a continuous variable corresponding to the total number of students enrolled in grades K-12 in the (i)th district; 
+
+Whereas **X3(i)[Poverty Pct.]** is a variable ranging from 0 to 100 that describes the percentage of 5-17 year olds in the (i)th district that live under the federal poverty line; 
+
+Whereas **X4(i)[Student-to-Teacher Ratio]** is a continuous variable corresponding to the ratio of students to teachers in the (i)th district; 
+
+And whereas **(X1(i) * X2(i))[Elected * Total Enrollment]** is an interaction variable that allows the effect of having an elected superintendent to vary alongside the total enrollment in the (i)th district. 
+If elected superintendents are detrimental to student outcomes than we would expect the sign on **X1(i)[Elected]** to be negative. More specifically, we’d expect the combined effect of **X1(i)[Elected]** and **(X1(i) * X2(i))[Elected * Total Enrollment]** to be negative.
+
+# Regression Results 
+
+Regression results are presented in Figure (10). The different models, or rather the different dependent variables used, are displayed in separate columns.
+
+
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+
+library(stargazer)
+
+stargazer::stargazer(newgradfit, newmeanfit, newalg, newbio, newenglish, newhistory, type ='latex', title = "Figure (10) Regression Results", font.size = "tiny", header = FALSE,
+covariate.labels=c("Elected Superintendent", "Total Number of Students Enrolled", 
+                   "Percentage of Students in Poverty", "Student-to-Teacher Ratio", "Elected:Total         Number of Students Enrolled"))
+
+```
+
+The only model that found evidence of an effect of a district electing their superintendent is presented in Column (1), which used the 2009 cohort graduation rate as the dependent variable. According to the regression results, districts with elected superintendents are associated with graduation rates 4.3 percentage points lower than districts with appointed superintendents even after controlling for district enrollment, poverty levels, and the student-to-teacher ratio. This p-value on this coefficient is 0.06, meaning that there is a less than a 6% probability that this result is due to chance. However, with the positive (albeit, very small) coefficient on “Elected:Total Number of Students Enrolled” the negative association of having an elected superintendent on graduation rates diminishes as district enrollment increases. 
+
+None of the other models, which use test scores as the student outcome/dependent variable, show significant results for the effect of electing a superintendent as opposed to appointing one. Similarly, the interaction term between district size and the election dummy variable is insignificant in all other models except the first one. 
+
+Figure (11) shows the predicted results (graduation rate) of two identical districts with average characteristics (35.1% Percent in Poverty, 2,700 students enrolled, and a 14.9 student-to-teacher ratio). However, the first row shows the predicted graduation rate for a district with an elected superintendent and average characteristics, while the second row shows the predicted graduation rate for a district with an appointed superintendent and average characteristics. The predicted graduation rate is one percentage point lower for the district with an elected superintendent. 
+
+```{r, echo=FALSE, results ='asis', warning=FALSE}
+
+library(stargazer)
+stargazer(together, type='latex', title = "Figure (11) Predicted Values", header = FALSE, summary = FALSE)
+
+```
+
