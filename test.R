@@ -17,6 +17,7 @@ library(lattice)
 
 
 #Load the data 
+
 #Selection method data
 SM <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/AorE.csv")
 SM <- read.csv(text = SM)
@@ -115,26 +116,6 @@ sub$X..Passing.U.S.HISTORY <- as.integer(sub$X..Passing.U.S.HISTORY)
 sub$X..Passing.ENGLISH <- as.integer(sub$X..Passing.ENGLISH)
 sub$X..Passing.BIOLOGY <- as.integer(sub$X..Passing.BIOLOGY)
 
-#Get some descriptive statistics on all test scores 
-aggregate(sub$X..Passing.ALGEBRA, by=list(sub$AorE), FUN=mean)
-aggregate(sub$X..Passing.U.S.HISTORY , by=list(sub$AorE), FUN=mean)
-aggregate(sub$X..Passing.ENGLISH, by=list(sub$AorE), FUN=mean)
-aggregate(sub$X..Passing.BIOLOGY , by=list(sub$AorE), FUN=mean)
-
-Selection.Method <- c("Appointed", "Elected")
-Passing.Algebra <- c("81.83%", "82.46%")
-Passing.Biology <- c("75.53%", "76.6%")
-Passing.English <- c("69.28%", "70.27%")
-Passing.History <- c("76.96%", "77.82%")
-Average.Enrollment <- c("2312", "3201")
-Average.Pct.In.Poverty <- c("37%", "32%")
-
-#Create data frame that stores the descriptive stats 
-DescriptiveStats <- data.frame(Selection.Method, Passing.Algebra, Passing.Biology,
-                               Passing.English, Passing.History, Average.Enrollment,
-                               Average.Pct.In.Poverty)
-
-
 #Merge enrollment data by "District Code"
 enrollandsub <- merge(sub, enroll2, by = "District.Code")
 
@@ -143,30 +124,30 @@ enrollandsub$Number.Enrolled <- as.vector(enrollandsub$Number.Enrolled)
 enrollandsub$Number.Enrolled <- as.integer(enrollandsub$Number.Enrolled)
 
 #Change varaible names to make it easier to read
-enrollandsub$MeanAlgebra <- enrollandsub$Mean.Scale.Score.ALGEBRA
-enrollandsub$MeanHistory <- enrollandsub$Mean.Scale.Score.U.S.HISTORY
-enrollandsub$MeanEnglish <- enrollandsub$Mean.Scale.Score.ENGLISH
-enrollandsub$MeanBiology <- enrollandsub$Mean.Scale.Score.BIOLOGY
+enrollandsub$Algebra <- enrollandsub$Mean.Scale.Score.ALGEBRA
+enrollandsub$History <- enrollandsub$Mean.Scale.Score.U.S.HISTORY
+enrollandsub$English <- enrollandsub$Mean.Scale.Score.ENGLISH
+enrollandsub$Biology <- enrollandsub$Mean.Scale.Score.BIOLOGY
 
 #Convert variables into intergers for analysis purposes 
-enrollandsub$MeanAlgebra <- as.vector(enrollandsub$MeanAlgebra)
-enrollandsub$MeanAlgebra <- as.integer(enrollandsub$MeanAlgebra)
+enrollandsub$Algebra <- as.vector(enrollandsub$Algebra)
+enrollandsub$Algebra <- as.integer(enrollandsub$Algebra)
 
-enrollandsub$MeanEnglish <- as.vector(enrollandsub$MeanEnglish)
-enrollandsub$MeanEnglish <- as.integer(enrollandsub$MeanEnglish)
+enrollandsub$English <- as.vector(enrollandsub$English)
+enrollandsub$English <- as.integer(enrollandsub$English)
 
-enrollandsub$MeanBiology <- as.vector(enrollandsub$MeanBiology)
-enrollandsub$MeanBiology <- as.integer(enrollandsub$MeanBiology)
+enrollandsub$Biology <- as.vector(enrollandsub$Biology)
+enrollandsub$Biology <- as.integer(enrollandsub$Biology)
 
-enrollandsub$MeanHistory <- as.vector(enrollandsub$MeanHistory)
-enrollandsub$MeanHistory <- as.integer(enrollandsub$MeanHistory)
+enrollandsub$History <- as.vector(enrollandsub$History)
+enrollandsub$History <- as.integer(enrollandsub$History)
 
 #Create new variable called "CompositeScore" which is the combined average test scores of 
 #Algebra, English, History, and Biology 
-enrollandsub$CompositeScore <- ave(enrollandsub$MeanAlgebra, enrollandsub$MeanEnglish, 
-                            enrollandsub$MeanHistory, enrollandsub$MeanBiology)
+enrollandsub$CompositeScore <- ave(enrollandsub$Algebra, enrollandsub$English, 
+                            enrollandsub$History, enrollandsub$Biology)
 
-#Create a dummy varaible for the appointed and elected varaible 
+#Create a dummy varaible for the appointed and elected variable. Elected = 1 and Appointed = 0. 
 enrollandsub$EA10 <- ifelse(enrollandsub$AorE == "Elected", 1, 0)
 
 #Get rid of collumns that don't matter
@@ -190,19 +171,6 @@ all$State.FIPS.Code <- NULL
 all$State.Postal.Code <- NULL 
 all$School.Name <- NULL
 
-#Density graphs of descriptive stats, grouped by superintendent selection method
-alg <- ggplot(enrollandsub, aes(x = MeanAlgebra))
-alg + geom_density(aes(fill=factor(AorE)), alpha =.75)
-
-bio <- ggplot(enrollandsub, aes(x = MeanBiology))
-bio + geom_density(aes(fill=factor(AorE)), alpha= .75)
-
-eng <- ggplot(enrollandsub, aes(x = MeanEnglish))
-eng + geom_density(aes(fill=factor(AorE)), alpha= .75)
-
-hist <- ggplot(enrollandsub, aes(x = MeanHistory))
-hist + geom_density(aes(fill=factor(AorE)), alpha= .75)
-
 #Clean up District.Name for merging purposes 
 all$DDistrict <-c(str_sub(all$District.Name, 1, 10))
 all$DDistrict <- tolower(all$DDistrict)
@@ -215,22 +183,18 @@ gg <- merge(gradrates, all, by.x ="DDistrict", by.y = "DDistrict", all.X = TRUE)
 gg <- gg[-c(21, 23, 36, 37, 61, 62, 113, 114), ]
 
 #Rename gradrate variable
-gg$gradrate09 <- gg$Grad.Rate...09.Cohort..
+gg$GradRate <- gg$Grad.Rate...09.Cohort..
 
 #Convert gradrate varaible to an integer for analysis purposes 
-gg$gradrate09 <- as.vector(gg$gradrate09)
-gg$gradrate09 <- as.integer(gg$gradrate09)
+gg$GradRate <- as.vector(gg$GradRate)
+gg$GradRate <- as.integer(gg$GradRate)
 
 #For some reason gradrate09 was coded as the graduation rate of the 2009 class * 2. 
-gg$gradrate09 <- gg$gradrate09 / 2
+gg$GradRate <- gg$GradRate / 2
 
 #Convert Enrollment variable to an integer for analysis purposes 
 gg$Number.Enrolled <- as.vector(gg$Number.Enrolled)
 gg$Number.Enrolled <- as.integer(gg$Number.Enrolled)
-
-#Density plot of graduation rates
-gradrate <- ggplot(gg, aes(x = gradrate09))
-gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +theme_bw()
 
 #Merge teacher-student-ratio data
 gg1 <- merge(gg, teacherstudentratio, by.x = "DDistrict", by.y = "DDistrict")
@@ -244,132 +208,82 @@ gg1$PovertyPct <- gg1$PovertyPct*100
 #Create an enrollment variable that shows enrollment in 100's
 gg1$Enrolled100s <- gg1$Number.Enrolled / 100
 
-#Run first regressions 
-newgradfit <- lm(gradrate09 ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                   PovertyPct + StudentTeacherRatio, data = gg1)
-
-newmeanfit <-lm(CompositeScore ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                  PovertyPct + StudentTeacherRatio, data = gg1)
-
-newalg <- lm(MeanAlgebra  ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-               PovertyPct + StudentTeacherRatio, data = gg1)
-
-newbio <- lm(MeanBiology ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-               PovertyPct + StudentTeacherRatio, data = gg1)
-
-newenglish <- lm(MeanEnglish ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                   PovertyPct + StudentTeacherRatio, data = gg1)
-
-newhistory <- lm(MeanHistory ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                   PovertyPct + StudentTeacherRatio, data = gg1)
-
-summary(newgradfit)
-confint(newgradfit)
-
-#Whats the difference in grad rates for a district with average characteristics, but 
-#one has an appointed superintendent and one has en elected superintendent
-electedfit <- with(gg1,
-                   data.frame(EA10 = 1, 
-                              Enrolled100s = 27, 
-                              "EA10*Enrolled100s" = 27, 
-                              PovertyPct = 35.1, 
-                              StudentTeacherRatio = 14.9))
-
-electedfit$predicted <- predict(newgradfit, newdata = electedfit, type='response')
-
-appointedfit <- with(gg1, 
-                     data.frame(EA10 = 0,  
-                                Enrolled100s = 27, 
-                                "EA10*Enrolled100s" = 0, 
-                                PovertyPct = 35.1,
-                                StudentTeacherRatio = 14.9))
-
-appointedfit$predicted <- predict(newgradfit, newdata = appointedfit, type='response')
-
-#Store predicted values into a data.frame for Rmarkdown purposes
-together <- rbind(electedfit, appointedfit)
-together <- data.frame(together)
-
-electedfitsmall <- with(gg1,
-                   data.frame(EA10 = 1, 
-                              Enrolled100s = 10, 
-                              "EA10*Enrolled100s" = 27, 
-                              PovertyPct = 35.1, 
-                              StudentTeacherRatio = 14.9))
-
-electedfitsmall$predicted <- predict(newgradfit, newdata = electedfitsmall, type='response')
-
-appointedfitsmall <- with(gg1, 
-                     data.frame(EA10 = 0,  
-                                Enrolled100s = 10, 
-                                "EA10*Enrolled100s" = 0, 
-                                PovertyPct = 35.1,
-                                StudentTeacherRatio = 14.9))
-
-appointedfitsmall$predicted <- predict(newgradfit, newdata = appointedfitsmall, type='response')
-
-together2 <- rbind(electedfitsmall, appointedfitsmall)
-together2 <- data.frame(together2)
-
 #Create a subset of data with just variables we used in the regressions
 cleandata <- gg1[, c("Enrolled100s",
                      "CompositeScore", "EA10", "PovertyPct",
-                     "gradrate09", "StudentTeacherRatio",
-                     "AorE", "MeanAlgebra", "MeanBiology",
-                     "MeanHistory", "MeanEnglish")]
+                     "GradRate", "StudentTeacherRatio",
+                     "AorE", "Algebra", "Biology",
+                     "History", "English")]
 
 #Omit any missing observations that don't have compelte data
 completeclean <- na.omit(cleandata)
 
+#Density graphs of descriptive stats, grouped by superintendent selection method
+alg <- ggplot(completeclean, aes(x = Algebra))
+alg + geom_density(aes(fill=factor(AorE)), alpha =.75)
+
+bio <- ggplot(completeclean, aes(x = Biology))
+bio + geom_density(aes(fill=factor(AorE)), alpha= .75)
+
+eng <- ggplot(completeclean, aes(x = English))
+eng + geom_density(aes(fill=factor(AorE)), alpha= .75)
+
+hist <- ggplot(completeclean, aes(x = History))
+hist + geom_density(aes(fill=factor(AorE)), alpha= .75)
+
+gradrate <- ggplot(completeclean, aes(x = GradRate))
+gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +theme_bw()
+
+#Run first regressions 
+newgradfit <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+                   PovertyPct + StudentTeacherRatio, data = completeclean)
+
+newmeanfit <-lm(CompositeScore ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+                  PovertyPct + StudentTeacherRatio, data = completeclean)
+
+newalg <- lm(Algebra  ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+               PovertyPct + StudentTeacherRatio, data = completeclean)
+
+newbio <- lm(Biology ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+               PovertyPct + StudentTeacherRatio, data = completeclean)
+
+newenglish <- lm(English ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+                   PovertyPct + StudentTeacherRatio, data = completeclean)
+
+newhistory <- lm(History ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+                   PovertyPct + StudentTeacherRatio, data = completeclean)
+
 #Stepup model. Start with just selection method and move up until we have the full model
-one <- lm(gradrate09 ~ EA10, data = completeclean)
+one <- lm(GradRate ~ EA10, data = completeclean)
 summary(one)
 
 #Add Poverty Percentage
-two <- lm(gradrate09 ~ EA10 + PovertyPct, data = completeclean)
+two <- lm(GradRate ~ EA10 + PovertyPct, data = completeclean)
 summary(two)
 
 #Add student teacher ratio
-three <- lm(gradrate09 ~ EA10 + PovertyPct + StudentTeacherRatio, data = completeclean)
+three <- lm(GradRate ~ EA10 + PovertyPct + StudentTeacherRatio, data = completeclean)
 summary(three)
 
 #Add Enrollment
-four <- lm(gradrate09 ~ EA10 + PovertyPct + StudentTeacherRatio + Enrolled100s, data = completeclean)
+four <- lm(GradRate ~ EA10 + PovertyPct + StudentTeacherRatio + Enrolled100s, data = completeclean)
 summary(four)
 
 #Full model. Includes interaction variable 
-newgradfit2 <- lm(gradrate09 ~ EA10 + Enrolled100s + EA10*Enrolled100s
+newgradfit2 <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
                   + PovertyPct + StudentTeacherRatio, data = completeclean)
 
-fitted(newgradfit2)
-summary(newgradfit2)
-confint(newgradfit2, level=0.90)
-plot(newgradfit2, which =2)
-
-anova(newgradfit2)
-
-xyplot(values ~ x, data = res, group = ind, auto.key = TRUE)
-xyplot(completeclean$gradrate09 ~ completeclean$PovertyPct, data = completeclean, type = c("p","r"), col.line = "red")
+xyplot(completeclean$GradRate ~ completeclean$PovertyPct, data = completeclean, type = c("p","r"), col.line = "red")
 
 
-Z1 <- zelig(gradrate09 ~ EA10 + EA10:Enrolled100s
+#Bootstrap it 
+Z1 <- zelig(GradRate ~ EA10 + EA10:Enrolled100s
             + PovertyPct + StudentTeacherRatio, cite = FALSE,
             data = completeclean, model = 'ls')
 
-setZ1 <- setx(Z1, Enrolled100s = 0:200)
+setZ1 <- setx(Z1, Enrolled100s = 0:60)
 simZ1 <- sim(Z1, x = setZ1)
 plot(simZ1)
-
-Z2 <- zelig(gradrate09 ~ Enrolled100s
-            + PovertyPct + StudentTeacherRatio, cite = FALSE,
-            data = simpleelected, model = 'ls')
-
-setZ2 <- setx(Z2, Enrolled100s = 0:200)
-simZ2 <- sim(Z2, x = setZ1)
-plot(simZ2)
-
-?zelig
-help.zelig("models")
 
 #Subset the data just to look at appointed or just elected districts
 appointed <- subset(completeclean, AorE == "Appointed")
@@ -382,28 +296,28 @@ simpleclean <- completeclean[,c(1, 2, 4, 5, 6, 7, 8, 9, 10, 11)]
 #Here's something interesting. The realtionship b/w enrollment and graduation rates 
 #is 0.28 for districts with elected superintendents. Meaning, as districts get bigger, 
 #graduation rates go up in elected districts. 
-enrollmentgradelected <- qplot(Enrolled100s, gradrate09, data = simpleelected)
+enrollmentgradelected <- qplot(Enrolled100s, GradRate, data = simpleelected)
 enrollmentgradelected
-cor(simpleelected$Enrolled100s, simpleelected$gradrate09)
+cor(simpleelected$Enrolled100s, simpleelected$GradRate)
 
 #However, that relationship does not hold for appointed districts. In these districts 
 #there is no relationship b/w enrollment and graduatation rates. 
-enrollmentgradappointed <- qplot(Enrolled100s, gradrate09, data = simpleappointed)
+enrollmentgradappointed <- qplot(Enrolled100s, GradRate, data = simpleappointed)
 enrollmentgradappointed
-cor(simpleappointed$Enrolled100s, simpleappointed$gradrate09)
+cor(simpleappointed$Enrolled100s, simpleappointed$GradRate)
 
 #Those really big distircts are doing really well in elected districts. That's 
 #probably why they're bigger 
-qplot(gradrate09, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
-qplot(gradrate09, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
+qplot(GradRate, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
+qplot(GradRate, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
 
 #Poverty effects grad rates the same way 
-qplot(gradrate09, PovertyPct, data=simpleelected) + stat_smooth(method= 'lm')
-qplot(gradrate09, PovertyPct, data=simpleappointed) + stat_smooth(method= 'lm')
+qplot(GradRate, PovertyPct, data=simpleelected) + stat_smooth(method= 'lm')
+qplot(GradRate, PovertyPct, data=simpleappointed) + stat_smooth(method= 'lm')
 
 #More or less, they're effected the same way. Both positive. 
-qplot(gradrate09, StudentTeacherRatio, data=simpleelected) + stat_smooth(method= 'lm')
-qplot(gradrate09, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method= 'lm')
+qplot(GradRate, StudentTeacherRatio, data=simpleelected) + stat_smooth(method= 'lm')
+qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method= 'lm')
 
 #Seperate realtionship does not hold for test scores. Explains why I see an effect with 
 #grad rates, but not test scores. Interesting. 
