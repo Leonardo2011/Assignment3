@@ -2,7 +2,7 @@
 title: "Differences in Student Outcomes Between School Districts with Appointed Superintendents
   Versus Districts with Elected Superintendents"
 author: "Owen Phillips"
-date: "November 14, 2014"
+date: "December 3, 2014"
 output:
   pdf_document:
     highlight: zenburn
@@ -29,8 +29,7 @@ repmis::LoadandCite(PackagesUsed, file = "Packages.bib", install = FALSE)
 ```
 
 ```{r echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
-
-source("~/Desktop/DataCollab/Assignment3/test.R")
+source("~/Desktop/DataCollab/Assignment3/DataAnalysis.R")
 ````
 
 # Background 
@@ -51,8 +50,8 @@ One of the challenges in working with this data is that it comes from multiple s
 ```{r, echo=FALSE, results='asis', cache=TRUE}
 
 Variables <- c('Enrolled100s', 'Student-to-Teacher Ratio',  
-                'Poverty Percentage', 'Graduation Rates', 'Composite Score',      'Mean Algebra', 
-                'Mean Biology', 'Mean History', 'Mean English')
+                'Poverty Percentage', 'Graduation Rates', 'Composite Score', 
+                'Mean Algebra', 'Mean Biology', 'Mean History', 'Mean English')
 Year <- c('2014', '2012','2012','2014','2014',
           '2014', '2014', '2014', '2014')
 Source <- c('NCES', 'NCES', '2012 Census', 'MSDE', 'MSDE', 
@@ -103,7 +102,7 @@ A table (Figure (1)) of descriptive statistics for all school districts in Missi
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 
 library(stargazer)
-stargazer(simpleclean, type='latex', digits = 1, header=FALSE, title = "Summary Stats for All Districts")
+stargazer(simpleclean, type='latex', digits = 1, header=FALSE, title = "Summary Statistics for All Districts")
 
 ```
 <br>  
@@ -115,7 +114,7 @@ Things become more interesting when the descriptive statistics are broken down b
 
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 
-stargazer(simpleappointed, type='latex', digits = 1, title = "Summary Stats for Appointed Districts", header = FALSE)  
+stargazer(simpleappointed, type='latex', digits = 1, title = "Summary Statistics for Appointed Districts", header = FALSE)  
 
 ```
 <br>
@@ -149,7 +148,7 @@ It may be easier to conceptualize the similarities between the two types of dist
 <br>
 <br>
 ```{r, results='asis', echo=FALSE}
-alg <- ggplot(enrollandsub, aes(x = MeanAlgebra))
+alg <- ggplot(enrollandsub, aes(x = Algebra))
 alg + geom_density(aes(fill=factor(AorE)), alpha =.75) + 
 ggtitle("Algebra II Distribution")
 ```
@@ -158,7 +157,7 @@ ggtitle("Algebra II Distribution")
 <br>
 
 ```{r, results='asis', echo=FALSE}
-bio <- ggplot(enrollandsub, aes(x = MeanBiology))
+bio <- ggplot(completeclean, aes(x = Biology))
 bio + geom_density(aes(fill=factor(AorE)), alpha= .75) +
 ggtitle("Biology Distribution")
 
@@ -168,7 +167,7 @@ ggtitle("Biology Distribution")
 <br>
 
 ```{r, results='asis', echo=FALSE}
-eng <- ggplot(enrollandsub, aes(x = MeanEnglish))
+eng <- ggplot(completeclean, aes(x = English))
 eng + geom_density(aes(fill=factor(AorE)), alpha= .75) +
 ggtitle("English Distribution")
 ```
@@ -177,7 +176,7 @@ ggtitle("English Distribution")
 <br>
 
 ```{r, results='asis', echo=FALSE}
-hist <- ggplot(enrollandsub, aes(x = MeanHistory))
+hist <- ggplot(completeclean, aes(x = History))
 hist + geom_density(aes(fill=factor(AorE)), alpha= .75) +
 ggtitle("History Distribution")
 ```
@@ -186,7 +185,7 @@ ggtitle("History Distribution")
 <br>
 
 ```{r, results='asis', echo=FALSE} 
-gradrate <- ggplot(gg, aes(x = gradrate09))
+gradrate <- ggplot(completeclean, aes(x = GradRate))
 gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
 ggtitle("Figure (9) Graduation Rates Distribution")
 ```
@@ -197,7 +196,7 @@ ggtitle("Figure (9) Graduation Rates Distribution")
 
 To assess the difference in student outcomes for the two types of districts I employed the use of regression analysis in order to control for certain observable characteristics that also impact student outcomes. The basic regression model is as follows: 
 
-**Y(i)[Student Outcome]** = **X0** + **X1(i)[Elected]** + **X2(i)[Enrolled100s]** + **X3(i)[Poverty Pct.]** + **X4(i)[Student-to-Teacher Ratio]** + **(X1(i) * X2(i))[Elected * Total Enrollment]**  + **Eo**
+**Y(i)[Student Outcome]** = **X0** + **X1(i)[Elected]** + **X2(i)[Enrolled100s]** + **X3(i)[Poverty Pct.]** + **X4(i)[Student-to-Teacher Ratio]** + **(X1(i) * X2(i))[Elected * Enrolled100s]**  + **Eo**
 
 Whereas **Y(i)[Student Outcome]** is the student outcome in the (i)th district. Student outcomes include the average Algebra II, Biology, U.S. History, and English SATP Test Scores in each district, a composite score of all SATP test scores in each district, and the 2009 cohort graduation rate; 
 
@@ -234,8 +233,13 @@ Figure (11) shows the predicted results (graduation rate) of two identical distr
 
 ```{r, echo=FALSE, results ='asis', warning=FALSE}
 
-library(stargazer)
-stargazer(together, type='latex', title = "Predicted Values", header = FALSE, summary = FALSE)
+Z1 <- zelig(GradRate ~ EA10 + EA10:Enrolled100s
+            + PovertyPct + StudentTeacherRatio, cite = FALSE,
+            data = completeclean, model = 'ls')
+
+setZ1 <- setx(Z1, Enrolled100s = 0:200)
+simZ1 <- sim(Z1, x = setZ1)
+plot(simZ1)
 
 ```
 

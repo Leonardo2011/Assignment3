@@ -1,20 +1,17 @@
-library(plyr)
-library(ggplot2)
-library(reshape)
-library(psych)
-library(epicalc)
-library(dplyr)
-library(car)
-library(stargazer)
-library(stringr)
-library(xtable)
-library(repmis)
-library(lmtest)
-library(RCurl)
-library(Zelig)
-library(lattice)
+# ipak function: install and load multiple R packages.
+# check to see if packages are installed. Install them if they are not, then load them into the R session.
+ipak <- function(pkg){
+    new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+    if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+    sapply(pkg, require, character.only = TRUE)
+    }
 
-
+packages <- c("psych", "car", "RCurl", "ggplot2", "reshape", "epicalc", "dplyr", "plyr", "stargazer",
+              "stringr", "knitr", "xtable", "repmis", "Zelig")
+ipak(packages)
+rm(packages)
+rm(ipak)
 
 #Load the data 
 
@@ -273,15 +270,12 @@ summary(four)
 newgradfit2 <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
                   + PovertyPct + StudentTeacherRatio, data = completeclean)
 
-xyplot(completeclean$GradRate ~ completeclean$PovertyPct, data = completeclean, type = c("p","r"), col.line = "red")
-
-
 #Bootstrap it 
 Z1 <- zelig(GradRate ~ EA10 + EA10:Enrolled100s
             + PovertyPct + StudentTeacherRatio, cite = FALSE,
             data = completeclean, model = 'ls')
 
-setZ1 <- setx(Z1, Enrolled100s = 0:60)
+setZ1 <- setx(Z1, Enrolled100s = 0:200)
 simZ1 <- sim(Z1, x = setZ1)
 plot(simZ1)
 
@@ -323,8 +317,3 @@ qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method=
 #grad rates, but not test scores. Interesting. 
 qplot(CompositeScore, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
 qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
-
-
- 
-
-
