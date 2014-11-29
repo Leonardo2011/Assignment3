@@ -139,46 +139,22 @@ poverty + geom_density(aes(fill=factor(AorE)), alpha= .75) +
 ggtitle("Poverty Distribution")
 
 ```
+
 <br>
 <br>
 
 In terms of student outcomes (graduation rates and SATP test scores), appointed and elected school districts are indistinguishable. Average graduation rates are within 0.6 percentage points of each other. Additionally, the biggest test score difference is in average English scores and that is only 0.6 points as well. 
 
 It may be easier to conceptualize the similarities between the two types of districts by examining density distributions of the aforementioned student outcomes. The following figures depict the density distributions for average Algebra II (Figure (5)), average Biology (Figure (6)), average English (Figure (7)), average History (Figure (8)), and average graduation rates (Figure (9)) for districts, delineated by whether they have an appointed or an elected superintendent. The distributions tell a fairly similar story to the descriptive statistics. At first glance, elected and appointed school districts are alike in regards to student outcomes. Considering the fact, it will be interesting to see whether this similarity holds after district characteristics (district enrollment, poverty, and student-to-teacher ratio) are controlled for. 
-<br>
-<br>
-```{r, results='asis', echo=FALSE}
-alg <- ggplot(enrollandsub, aes(x = Algebra))
-alg + geom_density(aes(fill=factor(AorE)), alpha =.75) + 
-ggtitle("Algebra II Distribution")
-```
 
 <br>
 <br>
 
 ```{r, results='asis', echo=FALSE}
-bio <- ggplot(completeclean, aes(x = Biology))
-bio + geom_density(aes(fill=factor(AorE)), alpha= .75) +
-ggtitle("Biology Distribution")
-
-```
-
-<br>
-<br>
-
-```{r, results='asis', echo=FALSE}
-eng <- ggplot(completeclean, aes(x = English))
-eng + geom_density(aes(fill=factor(AorE)), alpha= .75) +
-ggtitle("English Distribution")
-```
-
-<br>
-<br>
-
-```{r, results='asis', echo=FALSE}
-hist <- ggplot(completeclean, aes(x = History))
-hist + geom_density(aes(fill=factor(AorE)), alpha= .75) +
-ggtitle("History Distribution")
+melted <- melt(completeclean)
+submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
+way <- ggplot(submelted, aes(value, color = factor(AorE)))
+way + geom_density(aes(fill = factor(AorE)), alpha = .75) + facet_wrap(~ variable)
 ```
 
 <br>
@@ -231,14 +207,8 @@ None of the other models, which use test scores as the student outcome/dependent
 
 Figure (11) shows the predicted results (graduation rate) of two identical districts with average characteristics (35.1% Percent in Poverty, 2,700 students enrolled, and a 14.9 student-to-teacher ratio). However, the first row shows the predicted graduation rate for a district with an elected superintendent and average characteristics, while the second row shows the predicted graduation rate for a district with an appointed superintendent and average characteristics. The predicted graduation rate is one percentage point lower for the district with an elected superintendent. 
 
-```{r, echo=FALSE, results ='asis', warning=FALSE}
+```{r, results='asis', echo=FALSE}
 
-Z1 <- zelig(GradRate ~ EA10 + EA10:Enrolled100s
-            + PovertyPct + StudentTeacherRatio, cite = FALSE,
-            data = completeclean, model = 'ls')
-
-setZ1 <- setx(Z1, Enrolled100s = 0:200)
-simZ1 <- sim(Z1, x = setZ1)
 plot(simZ1)
 
 ```

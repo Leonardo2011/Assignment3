@@ -231,6 +231,16 @@ hist + geom_density(aes(fill=factor(AorE)), alpha= .75)
 gradrate <- ggplot(completeclean, aes(x = GradRate))
 gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +theme_bw()
 
+enrollment <- ggplot(completeclean, aes(x = Enrolled100s))
+enrollment + geom_bar(aes(fill=factor(AorE)), alpha = .75)
+
+melted <- melt(completeclean)
+submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
+way <- ggplot(submelted, aes(value, color = factor(AorE)))
+way + geom_density(aes(fill = factor(AorE)), alpha = .75) + facet_wrap(~ variable)
+
+
+
 #Run first regressions 
 newgradfit <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
                    PovertyPct + StudentTeacherRatio, data = completeclean)
@@ -271,13 +281,20 @@ newgradfit2 <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
                   + PovertyPct + StudentTeacherRatio, data = completeclean)
 
 #Bootstrap it 
-Z1 <- zelig(GradRate ~ EA10 + EA10:Enrolled100s
+Z1 <- zelig(GradRate ~ EA10 + Enrolled100s + EA10:Enrolled100s
             + PovertyPct + StudentTeacherRatio, cite = FALSE,
             data = completeclean, model = 'ls')
 
 setZ1 <- setx(Z1, Enrolled100s = 0:200)
 simZ1 <- sim(Z1, x = setZ1)
 plot(simZ1)
+
+smalldistricts <- subset(completeclean, Enrolled100s < 50)
+
+smallfit <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
+               + PovertyPct + StudentTeacherRatio, data = smalldistricts)
+
+summary(smallfit)
 
 #Subset the data just to look at appointed or just elected districts
 appointed <- subset(completeclean, AorE == "Appointed")
@@ -317,3 +334,5 @@ qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method=
 #grad rates, but not test scores. Interesting. 
 qplot(CompositeScore, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
 qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
+
+

@@ -1,5 +1,6 @@
 base
 bitops
+boot
 car
 dplyr
 epicalc
@@ -14,8 +15,10 @@ psych
 RCurl
 repmis
 reshape
+sandwich
 stargazer
 stringr
 survival
 xtable
+Zelig
 zoo
