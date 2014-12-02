@@ -111,15 +111,9 @@ To begin, first examine the descriptive statistics for all school districts in M
 
 Things become more interesting when the descriptive statistics are broken down by whether the school district appoints or elects their superintendent. Figures (2) and (3) show the same summary statistics as Figure (1), but for districts with appointed and elected superintendents respectively.
 
-
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 
 stargazer(simpleappointed, type='latex', digits = 1, title = "Summary Statistics for Appointed Districts", header = FALSE)  
-
-```
-<br>
-
-```{r, results='asis', echo=FALSE, warning=FALSE}
 
 stargazer(simpleelected, type='latex', digits = 1, title = "Summary Stats for Elected Districts", header = FALSE)  
 
@@ -150,7 +144,7 @@ It may be easier to conceptualize the similarities between the two types of dist
 <br>
 <br>
 
-```{r, results='asis', echo=FALSE}
+```{r, results='asis', echo=FALSE, warning=FALSE}
 melted <- melt(completeclean)
 submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
 way <- ggplot(submelted, aes(value, color = factor(AorE)))

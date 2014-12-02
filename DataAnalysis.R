@@ -92,7 +92,6 @@ mergedata <- merge(SM, Test.Data, by='dname', all.y = TRUE)
 #Removing duplicated Pontotoc County Schools  
 #Remvoing duplicated Quitman County School District
 #Removing duplicated Quiitman School District
-
 newmerge <- mergedata[-c(55, 56, 59, 60, 87, 88, 89, 90, 114, 117, 122, 121), ]
 
 #relabel "Bay. St Louis" and "Tate County" 
@@ -147,26 +146,12 @@ enrollandsub$CompositeScore <- ave(enrollandsub$Algebra, enrollandsub$English,
 #Create a dummy varaible for the appointed and elected variable. Elected = 1 and Appointed = 0. 
 enrollandsub$EA10 <- ifelse(enrollandsub$AorE == "Elected", 1, 0)
 
-#Get rid of collumns that don't matter
-enrollandsub$MeanScore <- NULL
-enrollandsub$Mean.Scale.Score.ALGEBRA <- NULL
-enrollandsub$Mean.Scale.Score.U.S.HISTORY <- NULL
-enrollandsub$Mean.Scale.Score.ENGLISH <- NULL
-enrollandsub$Mean.Scale.Score.BIOLOGY <- NULL
-enrollandsub$Grade <- NULL
-enrollandsub$School.Code <- NULL
-
 #Relabel two mis-lableed observations
 enrollandsub[38, "SchoolDistrict"] <- "Bay St. Louis School District"  
 enrollandsub[124, "SchoolDistrict"] <- "Tate County School District"  
 
 #Merge poverty level data set
 all <- merge(enrollandsub, poverty, by.x = "SchoolDistrict", by.y = "Name", all.x = TRUE)
-
-#Get rid of useless columns 
-all$State.FIPS.Code <- NULL 
-all$State.Postal.Code <- NULL 
-all$School.Name <- NULL
 
 #Clean up District.Name for merging purposes 
 all$DDistrict <-c(str_sub(all$District.Name, 1, 10))
