@@ -266,13 +266,20 @@ newgradfit2 <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
                   + PovertyPct + StudentTeacherRatio, data = completeclean)
 
 #Bootstrap it 
-Z1 <- zelig(GradRate ~ EA10 + Enrolled100s + EA10:Enrolled100s
-            + PovertyPct + StudentTeacherRatio, cite = FALSE,
-            data = completeclean, model = 'ls')
 
-setZ1 <- setx(Z1, Enrolled100s = 0:200)
+completeclean$Enrolled100s <- as.factor(completeclean$Enrolled100s)
+completeclean$EA10 <- as.factor(completeclean$EA10)
+
+Z1 <- zelig(GradRate ~ EA10 + Enrolled100s + EA10:Enrolled100s + PovertyPct + StudentTeacherRatio, 
+            cite = FALSE, data = completeclean, model = 'ls')
+
+setZ1 <- setx(Z1, Enrolled100s = 1:62, EA10 = 0) 
 simZ1 <- sim(Z1, x = setZ1)
-plot(simZ1)
+plot(simZ1, ylim=c(60,80))
+
+setZ2 <- setx(Z1, Enrolled100s = 2:140, EA10 = 1) 
+simZ2 <- sim(Z1, x = setZ2)
+plot(simZ2, ylim=c(60,80))
 
 smalldistricts <- subset(completeclean, Enrolled100s < 50)
 
