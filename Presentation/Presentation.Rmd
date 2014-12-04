@@ -9,11 +9,7 @@ output:
     fig_retina: NULL
 
 ---
-```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE}
-#Set Working Directory 
 
-setwd("~/Desktop/DataCollab/Assignment3/Presentation")
-```
 
 ## Overview of U.S. School Districts 
 
