@@ -8,10 +8,11 @@ ipak <- function(pkg){
     }
 
 packages <- c("psych", "car", "RCurl", "ggplot2", "reshape", "epicalc", "dplyr", "plyr", "stargazer",
-              "stringr", "knitr", "xtable", "repmis", "Zelig")
+              "stringr", "knitr", "xtable", "repmis", "Zelig", "maptools", "ggmap", "RColorBrewer")
 ipak(packages)
 rm(packages)
 rm(ipak)
+
 
 #Load the data 
 
@@ -326,5 +327,24 @@ qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method=
 #grad rates, but not test scores. Interesting. 
 qplot(CompositeScore, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
 qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
+
+area <- readShapePoly(file.choose())
+colors <- brewer.pal(9, "BuGn")
+
+mapimage <- get_map(location = c(lon = -90, lat = 32.2), 
+                    color = "color", 
+                    source = 'google',
+                    zoom = 7)
+
+area.points <- fortify(area)
+
+ggmap(mapimage) + 
+  geom_polygon(aes(x = long,
+                   y = lat, 
+                   group = group), 
+               data = area.points, 
+               color = colors[9], 
+               fill = colors[6],
+               alpha = 0.5)
 
 
