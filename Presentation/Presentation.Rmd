@@ -28,7 +28,7 @@ output:
 </div>
 
 <div class="centered">
-65 of Mississippi's 151 School Superintendents Are Elected
+65 of Mississippi's 151 School Superintendents Are Elected (~43%)
 </div>
 
 
@@ -41,7 +41,7 @@ output:
 </div>
 
 <div class="centered">
-65 of Mississippi's 151 School Superintendents Are Elected
+65 of Mississippi's 151 School Superintendents Are Elected (~43%)
 </div>
 
 
@@ -97,20 +97,20 @@ way + geom_density(aes(fill = factor(AorE)), alpha = .55) + facet_wrap(~ variabl
 ggtitle("SATP Test Score Distributions") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + scale_color_manual(values = c("#009966", "#D1322D"))
 ```
 
-## Graduation Rates Distributions {.flexbox .vcenter}
+## Graduation Rate Distributions {.flexbox .vcenter}
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 gradrate <- ggplot(completeclean, aes(x = GradRate))
 gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
 ggtitle("Graduation Rates Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
 ```
 
-## Poverty Distribution {.flexbox .vcenter}
+## Poverty Rate Distributions {.flexbox .vcenter}
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 poverty <- ggplot(completeclean, aes(x = PovertyPct))
-poverty + geom_density(aes(fill=factor(AorE)), alpha = .75) + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + ggtitle("Povery Rates Distribution")
+poverty + geom_density(aes(fill=factor(AorE)), alpha = .75) + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + ggtitle("Poverty Rates Distribution")
 ```
 
-## Enrollment Distributions {.flexbox .vcenter}
+## Enrollment Size Distributions {.flexbox .vcenter}
 
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 EnrollmentDis <- ggplot(completeclean, aes(x = Enrolled100s))
