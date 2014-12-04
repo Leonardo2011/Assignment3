@@ -13,6 +13,7 @@ ipak(packages)
 rm(packages)
 rm(ipak)
 
+setwd("~/Desktop/DataCollab/Assignment3")
 
 #Load the data 
 
@@ -226,7 +227,6 @@ way <- ggplot(submelted, aes(value, color = factor(AorE)))
 way + geom_density(aes(fill = factor(AorE)), alpha = .75) + facet_wrap(~ variable)
 
 
-
 #Run first regressions 
 newgradfit <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
                    PovertyPct + StudentTeacherRatio, data = completeclean)
@@ -262,25 +262,23 @@ summary(three)
 four <- lm(GradRate ~ EA10 + PovertyPct + StudentTeacherRatio + Enrolled100s, data = completeclean)
 summary(four)
 
+five <- lm(GradRate ~ EA10 + PovertyPct + StudentTeacherRatio + Enrolled100s + Enrolled100s:EA10, data = completeclean)
+summary(five)
+
 #Full model. Includes interaction variable 
-newgradfit2 <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
-                  + PovertyPct + StudentTeacherRatio, data = completeclean)
-
+newgradfit2 <- lm(GradRate ~ EA10 + PovertyPct + StudentTeacherRatio + Enrolled100s + EA10:Enrolled100s,
+                  data = completeclean)
+summary(newgradfit2)
 #Bootstrap it 
-
-completeclean$Enrolled100s <- as.factor(completeclean$Enrolled100s)
-completeclean$EA10 <- as.factor(completeclean$EA10)
 
 Z1 <- zelig(GradRate ~ EA10 + Enrolled100s + EA10:Enrolled100s + PovertyPct + StudentTeacherRatio, 
             cite = FALSE, data = completeclean, model = 'ls')
 
 setZ1 <- setx(Z1, Enrolled100s = 1:62, EA10 = 0) 
 simZ1 <- sim(Z1, x = setZ1)
-plot(simZ1, ylim=c(60,80))
 
 setZ2 <- setx(Z1, Enrolled100s = 2:140, EA10 = 1) 
 simZ2 <- sim(Z1, x = setZ2)
-plot(simZ2, ylim=c(60,80))
 
 smalldistricts <- subset(completeclean, Enrolled100s < 50)
 
@@ -327,24 +325,4 @@ qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method=
 #grad rates, but not test scores. Interesting. 
 qplot(CompositeScore, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
 qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
-
-area <- readShapePoly(file.choose())
-colors <- brewer.pal(9, "BuGn")
-
-mapimage <- get_map(location = c(lon = -90, lat = 32.2), 
-                    color = "color", 
-                    source = 'google',
-                    zoom = 7)
-
-area.points <- fortify(area)
-
-ggmap(mapimage) + 
-  geom_polygon(aes(x = long,
-                   y = lat, 
-                   group = group), 
-               data = area.points, 
-               color = colors[9], 
-               fill = colors[6],
-               alpha = 0.5)
-
 

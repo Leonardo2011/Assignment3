@@ -1,0 +1,158 @@
+---
+title: "Student Outcomes Under Elected and Appointed Superintendents"
+author: "Owen Phillips"
+date: "Thursday, December 4, 2014"
+output: 
+  ioslides_presentation: 
+    fig_width: 8
+    fig_height: 5
+    fig_retina: NULL
+
+---
+```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE}
+#Set Working Directory 
+
+setwd("~/Desktop/DataCollab/Assignment3/Presentation")
+```
+
+## Overview of U.S. School Districts 
+
+- Approximately 14,500 School Districts 
+
+
+- ~14,350 School Districts Appoint Their Superintendent 
+
+
+- Meanwhile, ~150 School Districts Elect Their Superintendent 
+
+## Full Map of Mississippi School Districts 
+
+<div class="centered">
+![MississippiMap1](~/Desktop/DataCollab/Assignment3/Presentation/SchoolDistrict.jpeg)
+</div>
+
+<div class="centered">
+65 of Mississippi's 151 School Superintendents Are Elected
+</div>
+
+
+
+
+## Map of Mississippi School Districts 
+
+<div class="centered">
+![MississippiMap](~/Desktop/DataCollab/Assignment3/Presentation/SchoolDis.png)
+</div>
+
+<div class="centered">
+65 of Mississippi's 151 School Superintendents Are Elected
+</div>
+
+
+```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE, cache=FALSE}
+source("~/Desktop/DataCollab/Assignment3/DataAnalysis.R")
+```
+
+
+## Data 
+
+```{r, echo=FALSE, results='asis', cache=FALSE, fig.height=0.5}
+
+Variables <- c('Enrolled100s', 'Student-to-Teacher Ratio',  
+                'Poverty Percentage', 'Graduation Rates', 'Composite Score')
+Year <- c('2014', '2012','2012','2014','2014')
+Source <- c('NCES', 'NCES', '2012 Census', 'MSDE', 'MSDE')
+Explanation <- c('Total District Enrollment (k-12) in 100s', 'Ratio of students to teachers in the district', 
+                 'Percent of 5-17 year olds in poverty in the district', 
+                 '2014 Graduation rate of the 2009 cohort', 
+                 'Composite score of all SATP tests')
+
+# Combine
+datatable <- data.frame(Variables, Explanation, Year, Source)
+library(knitr)
+knitr::kable(datatable)
+
+
+```
+
+
+
+## Summary Statistics Appointed {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, fig.align='center', message = FALSE, fig.width=5, fig.height=7}
+library(stargazer)
+stargazer(simpleappointed, type='html', digits = 1, title = "Summary Statistics for Appointed Districts", header = FALSE)  
+
+
+```
+
+
+## Summary Statistics Elected {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, fig.align='center', fig.width=5, fig.height=7}
+
+stargazer(simpleelected, type='html', digits = 1, title = "Summary Stats for Elected Districts", header = FALSE)  
+
+```
+
+## Test Score Distributions {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+way + geom_density(aes(fill = factor(AorE)), alpha = .55) + facet_wrap(~ variable) + 
+ggtitle("SATP Test Score Distributions") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + scale_color_manual(values = c("#009966", "#D1322D"))
+```
+
+## Graduation Rates Distributions {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
+ggtitle("Graduation Rates Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
+```
+
+## Poverty Distribution {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+
+poverty <- ggplot(completeclean, aes(x = PovertyPct))
+poverty + geom_density(aes(fill=factor(AorE)), alpha = .75) + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + ggtitle("Povery Rates Distribution")
+```
+
+## Enrollment Distributions {.flexbox .vcenter}
+
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+EnrollmentDis <- ggplot(completeclean, aes(x = Enrolled100s))
+EnrollmentDis + geom_density(aes(fill=factor(AorE)), alpha =.65) +
+ggtitle("Enrollment Size Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
+```
+
+## Regression Output {.flexbox .vcenter}
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+library(stargazer)
+stargazer(newgradfit2, type ='html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty", "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"))
+summary(newgradfit2)
+
+```
+
+## Modeling Graduation Rates 
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+stargazer(one, two, three, four, five, type = 'html', table.layout = "#tn", covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), column.labels = "Graduation Rates")
+
+
+```
+
+## Predicted Graduation Rates For Appointed Districts {.flexbox .vcenter}
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+plot(simZ1, ylim=c(60,80)) 
+
+```
+
+## Predicted Graduation Rates Elected Districts {.flexbox .vcenter}
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+plot(simZ2, ylim=c(60,80), xlim=c(0,60)) 
+
+``` 
+
+# Questions? 
