@@ -326,3 +326,6 @@ qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method=
 qplot(CompositeScore, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
 qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
 
+write.csv(completeclean, file = "cleanddata.csv")
+write.csv(simpleappointed, file = "appointed.csv")
+write.csv(simpleelected, file = "elected.csv")
