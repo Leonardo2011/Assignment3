@@ -50,7 +50,9 @@ setwd("~/Desktop/DataCollab/Assignment3/Presentation")
 
 
 ```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE, cache=FALSE}
-source("https://raw.githubusercontent.com/Henryjean/Assignment3/master/DataAnalysis.R")
+library(devtools)
+SourceURL <- ("https://raw.githubusercontent.com/Henryjean/Assignment3/master/DataAnalysis.R")
+source_url(SourceURL)
 ```
 
 
