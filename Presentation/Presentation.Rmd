@@ -155,4 +155,26 @@ plot(simZ2, ylim=c(60,80), xlim=c(0,60))
 
 ``` 
 
+## In Summary 
+
+- On Paper, Student Outcomes In Appointed and Elected Districts Look The Same
+
+- Once You Control For Differences, Things Look Differently 
+
+- Specifically, Graudation Rates in Elected Districts are ~4 Pct Pts Lower Than In Appointed Districts 
+
+## But Most Importantly 
+
+<div class="centered">
+![SIZE MATTERS](http://stream1.gifsoup.com/view7/2712973/size-matters-o.gif)
+</div>
+
+<div class="centered">
+
+<b>
+(Enrollment) SIZE MATTERS!
+</b>
+</div>
+
+
 # Questions? 
