@@ -42,9 +42,17 @@ teacherstudentratio <- getURL("https://raw.githubusercontent.com/Henryjean/Assig
 teacherstudentratio <- read.csv(text = teacherstudentratio)
 
 #Expenditure Data 
-
 exp <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/expenditures.csv")
 exp <- read.csv(text = exp)
+
+#Race Data
+race <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/race.csv")
+race <- read.csv(text = race)
+
+#Create Pct African American Variable 
+race$PctAA <- (race$Black / race$TotalStudents)
+race$PctHispanic <- (race$Hispanic / race$TotalStudents)
+
 
 #Subset Test.Data and Enrollment data to only look at District Wide Results
 Test.Data <- subset(Test.Data, School.Name == "Districtwide Data")
@@ -77,6 +85,10 @@ SM$dname <- sub(" ","",SM$dname)
 exp$dname <-c(str_sub(exp$Agency.Name, 1, 8))
 exp$dname <- tolower(exp$dname)
 exp$dname <- sub(" ","",exp$dname)
+
+race$dname <-c(str_sub(race$Agency.Name, 1, 8))
+race$dname <- tolower(race$dname)
+race$dname <- sub(" ","",race$dname)
 
 #Create consistent District names for merging purposes
 teacherstudentratio$DDistrict <- c(str_sub(teacherstudentratio$DistrictName, 1, 10))
@@ -210,15 +222,19 @@ cc1 <- merge(gg1, exp, by.x = "dname", by.y = "dname")
 cc1$CEXPPP <- as.vector(cc1$CEXPPP)
 cc1$CEXPPP<- as.integer(cc1$CEXPPP)
 
+#Mergin race data 
 
+cc2 <- merge(cc1, race, by.x = "dname", by.y = "dname")
 
+cc2$PctAA <- as.vector(cc2$PctAA)
+cc2$PctAA<- as.integer(cc2$PctAA)
 
 #Create a subset of data with just variables we used in the regressions
-cleandata <- cc1[, c("Enrolled100s",
+cleandata <- cc2[, c("Enrolled100s",
                      "CompositeScore", "EA10", "PovertyPct",
                      "GradRate", "StudentTeacherRatio",
                      "AorE", "Algebra", "Biology",
-                     "History", "English", "EXPPP", "CEXPPP", "IEXPPP")]
+                     "History", "English", "EXPPP", "CEXPPP", "IEXPPP", "PctAA")]
 
 #Omit any missing observations that don't have compelte data
 completeclean <- na.omit(cleandata)
@@ -244,6 +260,9 @@ enrollment + geom_bar(aes(fill=factor(AorE)), alpha = .75)
 
 expenditures <- ggplot(completeclean, aes(x = CEXPPP))
 expenditures + geom_density(aes(fill=factor(AorE)), alpha = .75)
+
+race <- ggplot(completeclean, aes(x = PctAA))
+race + geom_density(aes(fill=factor(AorE)), alpha = .75)
 
 melted <- melt(completeclean)
 submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
@@ -271,11 +290,14 @@ newhistory <- lm(History ~ EA10  + Enrolled100s + EA10*Enrolled100s +
                    PovertyPct + StudentTeacherRatio, data = completeclean)
 
 withexp <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                PovertyPct + log(StudentTeacherRatio) + log(CEXPPP), data = completeclean)
+                PovertyPct + StudentTeacherRatio + log(CEXPPP), data = completeclean)
 
-summary(withexp)
+withrace <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+                 PovertyPct + StudentTeacherRatio + CEXPPP + PctAA + PctHispanic, data = completeclean)
+
 summary(newgradfit)
-
+summary(withexp)
+summary(withrace)
 #Stepup model. Start with just selection method and move up until we have the full model
 one <- lm(GradRate ~ EA10, data = completeclean)
 summary(one)
