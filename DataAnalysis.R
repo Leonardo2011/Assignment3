@@ -247,15 +247,8 @@ newenglish <- lm(English ~ EA10  + Enrolled100s + EA10*Enrolled100s +
 newhistory <- lm(History ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
                    PovertyPct + StudentTeacherRatio, data = completeclean)
 
-withexp <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                PovertyPct + StudentTeacherRatio + log(CEXPPP), data = completeclean)
-
-withrace <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                 PovertyPct + StudentTeacherRatio + CEXPPP + PctAA, data = completeclean)
-
 summary(newgradfit)
-summary(withexp)
-summary(withrace)
+
 #Stepup model. Start with just selection method and move up until we have the full model
 one <- lm(GradRate ~ EA10, data = completeclean)
 summary(one)
