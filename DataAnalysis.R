@@ -41,6 +41,11 @@ gradrates <- read.csv(text = gradrates)
 teacherstudentratio <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/TeacherPupilRatio12.csv")
 teacherstudentratio <- read.csv(text = teacherstudentratio)
 
+#Expenditure Data 
+
+exp <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/expenditures.csv")
+exp <- read.csv(text = exp)
+
 #Subset Test.Data and Enrollment data to only look at District Wide Results
 Test.Data <- subset(Test.Data, School.Name == "Districtwide Data")
 enrollment <-subset(enrollment, School.Name == "District Level Data")
@@ -60,11 +65,18 @@ Test.Data$dname <-c(str_sub(Test.Data$District.Name, 1, 8))
 Test.Data$dname <- tolower(Test.Data$dname)
 Test.Data$dname <- sub(" ","",Test.Data$dname)
 
+#Get rid of missing data 
+exp <- na.omit(exp)
+
 #Create new variable called 'dname' that is the first 8 lower-case characters of the district name
 SM$dname <-c(str_sub(SM$SchoolDistrict, 1, 8))
 SM$dname <- tolower(SM$dname)
 SM$dname <- sub("[.] ","",SM$dname)
 SM$dname <- sub(" ","",SM$dname)
+
+exp$dname <-c(str_sub(exp$Agency.Name, 1, 8))
+exp$dname <- tolower(exp$dname)
+exp$dname <- sub(" ","",exp$dname)
 
 #Create consistent District names for merging purposes
 teacherstudentratio$DDistrict <- c(str_sub(teacherstudentratio$DistrictName, 1, 10))
@@ -192,12 +204,21 @@ gg1$PovertyPct <- gg1$PovertyPct*100
 #Create an enrollment variable that shows enrollment in 100's
 gg1$Enrolled100s <- gg1$Number.Enrolled / 100
 
+#Merging exp data 
+cc1 <- merge(gg1, exp, by.x = "dname", by.y = "dname")
+
+cc1$CEXPPP <- as.vector(cc1$CEXPPP)
+cc1$CEXPPP<- as.integer(cc1$CEXPPP)
+
+
+
+
 #Create a subset of data with just variables we used in the regressions
-cleandata <- gg1[, c("Enrolled100s",
+cleandata <- cc1[, c("Enrolled100s",
                      "CompositeScore", "EA10", "PovertyPct",
                      "GradRate", "StudentTeacherRatio",
                      "AorE", "Algebra", "Biology",
-                     "History", "English")]
+                     "History", "English", "EXPPP", "CEXPPP", "IEXPPP")]
 
 #Omit any missing observations that don't have compelte data
 completeclean <- na.omit(cleandata)
@@ -220,6 +241,9 @@ gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +theme_bw()
 
 enrollment <- ggplot(completeclean, aes(x = Enrolled100s))
 enrollment + geom_bar(aes(fill=factor(AorE)), alpha = .75)
+
+expenditures <- ggplot(completeclean, aes(x = CEXPPP))
+expenditures + geom_density(aes(fill=factor(AorE)), alpha = .75)
 
 melted <- melt(completeclean)
 submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
@@ -245,6 +269,12 @@ newenglish <- lm(English ~ EA10  + Enrolled100s + EA10*Enrolled100s +
 
 newhistory <- lm(History ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
                    PovertyPct + StudentTeacherRatio, data = completeclean)
+
+withexp <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
+                PovertyPct + log(StudentTeacherRatio) + log(CEXPPP), data = completeclean)
+
+summary(withexp)
+summary(newgradfit)
 
 #Stepup model. Start with just selection method and move up until we have the full model
 one <- lm(GradRate ~ EA10, data = completeclean)
@@ -279,6 +309,7 @@ simZ1 <- sim(Z1, x = setZ1)
 
 setZ2 <- setx(Z1, Enrolled100s = 2:140, EA10 = 1) 
 simZ2 <- sim(Z1, x = setZ2)
+
 
 smalldistricts <- subset(completeclean, Enrolled100s < 50)
 
@@ -325,6 +356,11 @@ qplot(GradRate, StudentTeacherRatio, data=simpleappointed) + stat_smooth(method=
 #grad rates, but not test scores. Interesting. 
 qplot(CompositeScore, Enrolled100s, data=simpleelected) + stat_smooth(method= 'lm')
 qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 'lm')
+
+qplot(StudentTeacherRatio, GradRate, data=completeclean) + stat_smooth(method = 'lm')
+qplot(StudentTeacherRatio, GradRate, data=simpleappointed) + stat_smooth(method = 'lm')
+
+
 
 write.csv(completeclean, file = "cleanddata.csv")
 write.csv(simpleappointed, file = "appointed.csv")
