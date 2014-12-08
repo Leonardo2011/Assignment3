@@ -51,7 +51,6 @@ race <- read.csv(text = race)
 
 #Create Pct African American Variable 
 race$PctAA <- (race$Black / race$TotalStudents)
-race$PctHispanic <- (race$Hispanic / race$TotalStudents)
 
 
 #Subset Test.Data and Enrollment data to only look at District Wide Results
@@ -293,7 +292,7 @@ withexp <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s +
                 PovertyPct + StudentTeacherRatio + log(CEXPPP), data = completeclean)
 
 withrace <- lm(GradRate ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
-                 PovertyPct + StudentTeacherRatio + CEXPPP + PctAA + PctHispanic, data = completeclean)
+                 PovertyPct + StudentTeacherRatio + CEXPPP + PctAA, data = completeclean)
 
 summary(newgradfit)
 summary(withexp)

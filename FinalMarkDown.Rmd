@@ -12,7 +12,8 @@ output:
   html_document:
     fig_caption: yes
     number_sections: yes
-bibliography: Packages.bib
+bibliography: 
+- Packages.bib
 ---
 
 
