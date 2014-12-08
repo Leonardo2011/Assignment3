@@ -41,18 +41,6 @@ gradrates <- read.csv(text = gradrates)
 teacherstudentratio <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/TeacherPupilRatio12.csv")
 teacherstudentratio <- read.csv(text = teacherstudentratio)
 
-#Expenditure Data 
-exp <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/expenditures.csv")
-exp <- read.csv(text = exp)
-
-#Race Data
-race <- getURL("https://raw.githubusercontent.com/Henryjean/Assignment3/master/Data%20Files/race.csv")
-race <- read.csv(text = race)
-
-#Create Pct African American Variable 
-race$PctAA <- (race$Black / race$TotalStudents)
-
-
 #Subset Test.Data and Enrollment data to only look at District Wide Results
 Test.Data <- subset(Test.Data, School.Name == "Districtwide Data")
 enrollment <-subset(enrollment, School.Name == "District Level Data")
@@ -72,22 +60,12 @@ Test.Data$dname <-c(str_sub(Test.Data$District.Name, 1, 8))
 Test.Data$dname <- tolower(Test.Data$dname)
 Test.Data$dname <- sub(" ","",Test.Data$dname)
 
-#Get rid of missing data 
-exp <- na.omit(exp)
 
 #Create new variable called 'dname' that is the first 8 lower-case characters of the district name
 SM$dname <-c(str_sub(SM$SchoolDistrict, 1, 8))
 SM$dname <- tolower(SM$dname)
 SM$dname <- sub("[.] ","",SM$dname)
 SM$dname <- sub(" ","",SM$dname)
-
-exp$dname <-c(str_sub(exp$Agency.Name, 1, 8))
-exp$dname <- tolower(exp$dname)
-exp$dname <- sub(" ","",exp$dname)
-
-race$dname <-c(str_sub(race$Agency.Name, 1, 8))
-race$dname <- tolower(race$dname)
-race$dname <- sub(" ","",race$dname)
 
 #Create consistent District names for merging purposes
 teacherstudentratio$DDistrict <- c(str_sub(teacherstudentratio$DistrictName, 1, 10))
@@ -215,25 +193,12 @@ gg1$PovertyPct <- gg1$PovertyPct*100
 #Create an enrollment variable that shows enrollment in 100's
 gg1$Enrolled100s <- gg1$Number.Enrolled / 100
 
-#Merging exp data 
-cc1 <- merge(gg1, exp, by.x = "dname", by.y = "dname")
-
-cc1$CEXPPP <- as.vector(cc1$CEXPPP)
-cc1$CEXPPP<- as.integer(cc1$CEXPPP)
-
-#Mergin race data 
-
-cc2 <- merge(cc1, race, by.x = "dname", by.y = "dname")
-
-cc2$PctAA <- as.vector(cc2$PctAA)
-cc2$PctAA<- as.integer(cc2$PctAA)
-
 #Create a subset of data with just variables we used in the regressions
-cleandata <- cc2[, c("Enrolled100s",
+cleandata <- gg1[, c("Enrolled100s",
                      "CompositeScore", "EA10", "PovertyPct",
                      "GradRate", "StudentTeacherRatio",
                      "AorE", "Algebra", "Biology",
-                     "History", "English", "EXPPP", "CEXPPP", "IEXPPP", "PctAA")]
+                     "History", "English")]
 
 #Omit any missing observations that don't have compelte data
 completeclean <- na.omit(cleandata)
@@ -256,12 +221,6 @@ gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +theme_bw()
 
 enrollment <- ggplot(completeclean, aes(x = Enrolled100s))
 enrollment + geom_bar(aes(fill=factor(AorE)), alpha = .75)
-
-expenditures <- ggplot(completeclean, aes(x = CEXPPP))
-expenditures + geom_density(aes(fill=factor(AorE)), alpha = .75)
-
-race <- ggplot(completeclean, aes(x = PctAA))
-race + geom_density(aes(fill=factor(AorE)), alpha = .75)
 
 melted <- melt(completeclean)
 submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
