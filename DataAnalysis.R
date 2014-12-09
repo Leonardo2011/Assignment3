@@ -60,7 +60,6 @@ Test.Data$dname <-c(str_sub(Test.Data$District.Name, 1, 8))
 Test.Data$dname <- tolower(Test.Data$dname)
 Test.Data$dname <- sub(" ","",Test.Data$dname)
 
-
 #Create new variable called 'dname' that is the first 8 lower-case characters of the district name
 SM$dname <-c(str_sub(SM$SchoolDistrict, 1, 8))
 SM$dname <- tolower(SM$dname)
@@ -203,6 +202,7 @@ cleandata <- gg1[, c("Enrolled100s",
 #Omit any missing observations that don't have compelte data
 completeclean <- na.omit(cleandata)
 
+
 #Density graphs of descriptive stats, grouped by superintendent selection method
 alg <- ggplot(completeclean, aes(x = Algebra))
 alg + geom_density(aes(fill=factor(AorE)), alpha =.75)
@@ -246,8 +246,6 @@ newenglish <- lm(English ~ EA10  + Enrolled100s + EA10*Enrolled100s +
 
 newhistory <- lm(History ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
                    PovertyPct + StudentTeacherRatio, data = completeclean)
-
-summary(newgradfit)
 
 #Stepup model. Start with just selection method and move up until we have the full model
 one <- lm(GradRate ~ EA10, data = completeclean)
@@ -332,7 +330,6 @@ qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 
 
 qplot(StudentTeacherRatio, GradRate, data=completeclean) + stat_smooth(method = 'lm')
 qplot(StudentTeacherRatio, GradRate, data=simpleappointed) + stat_smooth(method = 'lm')
-
 
 
 write.csv(completeclean, file = "cleanddata.csv")
