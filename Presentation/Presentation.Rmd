@@ -130,7 +130,7 @@ summary(newgradfit2)
 
 ## Modeling Graduation Rates 
 
-```{r, results='markup', echo=FALSE, warning=FALSE}
+```{r, results='asis', echo=FALSE, warning=FALSE}
 
 stargazer(one, two, three, four, five, type = 'html', table.layout = "#tn", covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), column.labels = "Graduation Rates")
 

@@ -14,10 +14,11 @@ output:
     number_sections: yes
 bibliography: 
 - Packages.bib
+- SuperBib.bib
 ---
 
 
-```{r echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+```{r include=FALSE}
 
 #Set working directory. 
 setwd("~/Desktop/DataCollab/Assignment3")
@@ -32,10 +33,57 @@ repmis::LoadandCite(PackagesUsed, file = "Packages.bib", install = FALSE)
 source("~/Desktop/DataCollab/Assignment3/DataAnalysis.R")
 ````
 
-# Background 
+## Introduction/Why This Is Important
+
+One of the most consistently controversial education reform issues in Mississippi is the ongoing debate over appointed versus elected superintendents. Of the more than 14,500 school districts in the United States it is up to the local school board to select and appoint a qualified superintendent, but for 146 school districts in three states (Alabama, Florida, and Mississippi) the residents of the district elect their superintendent. Of Mississippi’s 151 school districts, 63 of them have superintendent elections - the most of any state @Waller2011. 
+
+Supporters of appointed superintendents argue that elections narrow the pool of talent to choose from due to a restriction that candidates running for election must reside within the district they are running in. Meanwhile in school districts where superintendents are appointed, the school boards can recruit qualified candidates from different districts or even from different states. This is especially important in a state like Mississippi because in small school districts there may not be many qualified candidates, and those that are qualified may not be interested in campaigning. 
+ 
+According to the Mississippi Secretary of State’s [website](http://www.sos.ms.gov/Elections-Voting/Pages/Election-Results-By-Year.aspx), during the 2011 elections there were 13 different districts out of a total of 63 that hat had uncontested races for superintendent. In the previous elections of 2007, another 20 elections were uncontested, and in one district, no one ran at all. 
+
+In addition to a larger talent pool, supporters of appointment suggest that appointed superintendents can focus more on the job and less on the politics while elected superintendents must focus on the job while simultaneously run for office. Lastly, supporters point to the technical possibility that a poor performing appointed superintendent can be removed quickly, however a poor performing elected superintendent couldn’t be removed until the end of their four year term. 
+
+On the other hand, advocates of elected superintendents defend that a popular election requires the superintendent to answer to the voters and not a school board. Allowing voters to decide who should lead education locally enforces the idea that power should remain in the hands of the people. These supporters argue that a superintendent who answers to the people will create policies that coincide with the popular opinion of the district and would be less likely to act as a school board’s “puppet” like an appointed superintendent might. Thus an elected official has a responsibility to create consumer-orientated policies in order to stay in office in the next election. 
+
+Supporters of election also point to events of the late 1980s, when the Mississippi Legislature allowed school districts to vote to change to appointed superintendents or keep their elections. Every single district voted to keep their superintendent elections @Waller2011. 
+
+The issue of appointed versus elected superintendents picked up statewide attention when a bill proposing to abolish superintendent elections was presented and passed during a State Senate legislative session in 2014 [SB2166](http://legiscan.com/MS/research/SB2166/2014).  The bill proposed a transition of all superintendent elections to appointments by 2016. A short while later the bill died when introduced in a House of Representatives committee session [HB443](http://openstates.org/ms/bills/2014/HB443/). One reason why the bill never passed was that arguments from both sides of the debate were theoretical hypotheses and personal preferences. Updated and accurate empirical evidence surrounding the issue was thin, if not non-existent.
+
+Of Mississippi’s 151 school superintendents, 63 must face an election every four years, while the remaining superintendents are appointed to four-year terms. The only difference separating districts that appoint versus those that elect their superintendent are the way the school districts are defined. Elected superintendents come from districts shaped by county borders. While appointed superintendents are from districts that are either separate from county borders or have been consolidated from two separate districts to form one. 
+
+In this paper I intend to explore the relationship between student outcomes (state test scores, graduation rates, dropout rates, etc.…) and whether a school district has an appointed or elected superintendent. By using multivariate regression analysis I will be able to capture the specific relationship between the appointment/election variable and student outcomes while controlling for relevant demographic and socioeconomic factors at the district level. The goal of this paper is to provide evidence of the existence of a significant relationship, and provide policy recommendations to address the method for selecting school district superintendents. 
+
+### In Summary
 
 My primary question is: Are there significant differences in student outcomes for school districts that have appointed or elected superintendents, controlling for demographic and socioeconomic variables at the district level? To answer this question I intend to utilize multiple regression analysis in order to properly compare school districts that have different demographic and socioeconomic characteristics.  
 
+## Literature Review
+
+Since the late nineteenth century most if not all of the larger cities in the United States appointed their superintendents (Dykes, 1965). Meanwhile the majority of county districts had elected superintendents (Cubbery, 1909). It wasn’t until the 1930s that education administration writers began to publicly support appointment over election (Cubberly 1929 and Jaggers 1934) by citing the need to remove politics from school district leadership.  Today there are only a combined 146 school districts in Mississippi, Alabama, and Florida that have elected superintendents. 
+
+The earliest analysis of the differences in elected and appointed superintendents is from Tink (1929). The Author compared elected superintendents in Florida superintendents in Alabama, Maryland, and North Carolina and found that appointed superintendents had on average more experience and lasted longer in their position compared to their elected counterparts. One of Tink’s most important conclusions was that appointment led to an increase in the likelihood that smaller districts could secure an exceptional superintendent. 
+
+As the chief executive of a school district, the superintendent is responsible for all policies carried out at the district level. Situated as a liaison between school leaders, parents, and administrators, the superintendent must be able to balance the concerns of stakeholders while simultaneously prescribing a coherent and cohesive plan to improve district performance.
+  
+	In 2006, the Mid-Continent Research for Education and Learning conducted a comprehensive meta-analysis on the role of the superintendent and its association with student achievement. Using observations from over 2,800 school district and achievement scores from over 3.4 million students the researchers concluded that there was a statistically significant Pearson correlation coefficient of 0.24 between district leadership and student achievement. These results support Jeffrey Hanks’ (2010) findings that effective superintendents provide leadership by, “creating an environment conducive to excellence which helps principals stay focused on academics.” Effective superintendents can help focus school leaders in their district on specific goals (test scores, graduation rates, drop out rates, etc.….). 
+   
+A study by Mould (1975) compared the answers of a survey administered to school board members and school district officials about their experiences working with their appointed or elected superintendent. The results of the survey found that on average, officials and board members preferred working with an appointed rather than an elected superintendents; appointed superintendents were perceived to have had better job training and experience than elected superintendents; and that appointed superintendents were more capable of breaking from political ties compared to elected superintendents. 
+
+Barnett (1983) was the first researcher to look at the differences between appointed and elected superintendents in Mississippi specifically. The author compared the perceptions of school leaders on the differences between appointed and elected superintendents in the state. The author found that both elementary and secondary school principals perceived appointed superintendents to be more effective than elected superintends on average. However, there were no significant differences in the perception of superintendents from the perspective of school board members.   
+  
+Summers’ (1986) further illustrated the differences in the perceptions of school leadership by surveying principals on the effectiveness of their superintendent. Despite a small sample (perceptions were only based off of 30 appointed and 30 elected superintendents), the results showed that on average appointed superintendents were perceived by their principals to be more effective than elected superintendents and better suited to lead the district towards improved performance. 
+
+During the 1980s many school districts in Florida transitioned from elected superintendents to appointed superintendents. McClendon (1990) found that school board members in districts that switched to appointment believed that having an appointed superintendent led to a more positive learning environment than compared to before under the leadership of an elected superintendent. 
+
+A survey (Brand 1993) of Georgia’s principal’s perceptions of appointed and elected superintendents found that appointed superintendents were more experienced, older, and held higher degrees than their elected counterparts. The survey also showed that appointed superintendents were more likely to be concerned with school board relations while elected superintendents were more likely to pay more attention to school budgeting and finances. However, overall perceptions of the effectiveness of the superintendents were highest among appointed superintendents. 
+  
+Gregory (1997) used district performance index scores to compare the effectiveness of appointed and elected superintendents. Gregory was the first to use regression analysis to explore the quantitative differences in superintendent selection method, however the author found no statistically significant difference in district performance index scores between the two selection methods when using just a bivariate regression. But after controlling for per pupil expenditure, race, socio-economic status, and school board type, there appeared to be a small, but statistically significant negative association between appointing a superintendent and the district’s performance index score. Specifically, a district that had an appointed superintendent and an elected school board had an associated district performance index score district two-tenths of a point lower on average, holding demographic and socio-economic factors constant. 
+
+A similar analysis of Alabama superintendents (Hoover 2008) argued that student achievement scores under an appointed superintendent would be higher than those under an elected superintendent because elected officials are more concerned with satisfying their constituents and are less likely to deviate from the norm in pursuit of improving student achievement. Hoover contended that appointed superintendents are more likely to consider unpopular, but perhaps more effective policies to impact student performance because appointed superintendents are protected by at least one level of bureaucracy (the school board). Despite Hoover’s hypotheses, the results of a multiple regression analysis revealed that average test scores in districts under an appointed superintendent were not statistically significantly different than those under an elected superintendent after controlling for socioeconomic and demographic characteristics.   
+
+Various studies have linked the performance of superintendents with student achievement @MarzanoWaters2006 and others have attempted to examine the differences between elected versus appointed superintendents at the district level [@SchuhHerrington1990; @Dearman1997]. But most of the literature surrounding this topic is either outdated (the most recent analysis on Mississippi is from 1997) or of lesser quality. Thus, this paper intends to address those gaps by exploring the effects of superintendent selection method on student outcomes at the district level. This analysis will attempt to provide a more illustrative depiction of the impact of electing or appointing a superintendent in the state of Mississippi. 
+
+My attempt to uncover a relationship between superintendent selection method and student achievement is contingent upon the actual existence of the relationship between superintendent performance and student achievement itself. A recent paper from the Brookings Institution came to the conclusion that while district superintendents do have a statistically significant impact on student achievement, the effect is so small it’s almost meaningless in comparison to the impact a teacher or principal has @Chingos2014. Despite its minimal findings, the fact that there is a relationship shows that there also may be a relationship between superintendent selection method and student outcomes. Either way, this analysis will be a useful addition to the broader field of school superintendent research. 
 
 # Data Gathering 
 
@@ -189,8 +237,9 @@ Regression results are presented in Figure (10). The different models, or rather
 
 library(stargazer)
 
-stargazer::stargazer(newgradfit2, newmeanfit, newalg, newbio, newenglish, newhistory, type ='latex', title = "Regression Results", font.size = "tiny", header = FALSE,
-covariate.labels=c("Elected Superintendent", "Number of Students Enrolled \n(in 100s)", "Percentage of Students in Poverty", "Student-to-Teacher Ratio", "Elected:Number of Students Enrolled \n(in 100s)"))
+stargazer::stargazer(newgradfit2, newmeanfit, newalg, newbio, newenglish, newhistory, type ='latex', title = "Regression Results", font.size = 'tiny', header = FALSE,
+covariate.labels=c("Elected Superintendent", "Number of Students Enrolled \n(in 100s)", "Percentage of Students in Poverty", "Student-to-Teacher Ratio", "Elected:Number of Students Enrolled \n(in 100s)"), omit.stat=c("f", "rsq", "ser"), 
+digits = 2)
 
 ```
 
@@ -200,18 +249,21 @@ None of the other models, which use test scores as the student outcome/dependent
 
 In order to explore what is driving the association between districts with elected superintendents and graduation rates, it may be helpful to start with a basic bivariate model and then add control variables one at a time. Table 6 presents the results of such a model. 
 
+
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
 
 library(stargazer)
 
-stargazer(one, two, three, four, five, type = 'latex', font.size = "tiny", header = FALSE, covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"))
+stargazer(one, two, three, four, five, type = 'latex', header = FALSE, title = "Regression Results Continued", covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), omit.stat=c("f", "rsq", "ser"), digits = 2)
 
 ```
 
 ```{r, results='asis', echo=FALSE}
-
+par(mfrow=c(1,2))
 plot(simZ1)
+plot(simZ2)
 
 ```
 
-# References 
+## References
+
