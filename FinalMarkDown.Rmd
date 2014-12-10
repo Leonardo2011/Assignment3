@@ -29,7 +29,7 @@ repmis::LoadandCite(PackagesUsed, file = "Packages.bib", install = FALSE)
 
 ```
 
-```{r echo=FALSE, warning=FALSE, error=FALSE, message=FALSE}
+```{r echo=FALSE, warning=FALSE, error=FALSE, message=FALSE, cache=TRUE}
 source("~/Desktop/DataCollab/Assignment3/DataAnalysis.R")
 ````
 
@@ -95,7 +95,7 @@ One of the challenges in working with this data is that it comes from multiple s
 
 # Defining the Data
 
-```{r, echo=FALSE, results='asis', cache=TRUE}
+```{r, echo=FALSE, results='asis', cache=FALSE}
 
 Variables <- c('Enrolled100s', 'Student-to-Teacher Ratio',  
                 'Poverty Percentage', 'Graduation Rates', 'Composite Score', 
@@ -112,6 +112,7 @@ Explanation <- c('Total District Enrollment (k-12) in 100s', 'Ratio of students 
                  'Average Biology SATP Test Scores', 
                  'Average History SATP Test Scores', 
                  'Average English Test Scores')
+
 
 # Combine
 datatable <- data.frame(Variables, Explanation, Year, Source)
@@ -147,7 +148,7 @@ The definitions of the variables used for this analysis are rather straightforwa
 A table (Figure (1)) of descriptive statistics for all school districts in Mississippi is presented below. Although there are 151 school districts in Mississippi, some were omitted from this analysis due to inconsistent data recording or missing data all together.   
 
 
-```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 
 library(stargazer)
 stargazer(simpleclean, type='latex', digits = 1, header=FALSE, title = "Summary Statistics for All Districts")
@@ -159,7 +160,7 @@ To begin, first examine the descriptive statistics for all school districts in M
 
 Things become more interesting when the descriptive statistics are broken down by whether the school district appoints or elects their superintendent. Figures (2) and (3) show the same summary statistics as Figure (1), but for districts with appointed and elected superintendents respectively.
 
-```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 
 stargazer(simpleappointed, type='latex', digits = 1, title = "Summary Statistics for Appointed Districts", header = FALSE)  
 
@@ -173,7 +174,7 @@ For the 78 appointed school districts, the average number of students enrolled i
 Similarly, the other noticeable difference between the two types of districts is the average percentage of 5-17 year-olds in poverty. In appointed districts, the average percentage of 5-17 year-olds in poverty is at 37%, meanwhile it is just below 33% in elected districts. However, this likely due to the fact that appointed districts are comprised of municipalities and urban areas where poverty is more prevalent. The differences in poverty levels can also be illustrated in a density plot of the distribution of poverty percentages by whether the district has an appointed or elected superintendent. In Figure (4), the distribution of poverty percentages are essentially normally distributed for both appointed and elected school districts, but appear to be more skewed leftward for districts with elected superintendents thus resulting in a lower average poverty percentage for those districts as compared to appointed districts.   
 <br>
 <br>
-```{r, results='asis', echo=FALSE}
+```{r, results='asis', echo=FALSE, cache=TRUE}
 library(ggplot2)
 
 poverty <- ggplot(cleandata, aes(x = PovertyPct))
@@ -191,20 +192,21 @@ It may be easier to conceptualize the similarities between the two types of dist
 <br>
 <br>
 
-```{r, results='asis', echo=FALSE, warning=FALSE, message = FALSE}
+```{r, results='asis', echo=FALSE, warning=FALSE, message = FALSE, cache=TRUE}
 melted <- melt(completeclean)
 submelted <- subset(melted, variable == "Algebra" | variable == "Biology" | variable == "History" | variable == "English")
 way <- ggplot(submelted, aes(value, color = factor(AorE)))
-way + geom_density(aes(fill = factor(AorE)), alpha = .75) + facet_wrap(~ variable)
+way + geom_density(aes(fill = factor(AorE)), alpha = .75) + facet_wrap(~ variable) + 
+ggtitle("SATP Test Score Distributions")
 ```
 
 <br>
 <br>
 
-```{r, results='asis', echo=FALSE} 
+```{r, results='asis', echo=FALSE, cache=TRUE} 
 gradrate <- ggplot(completeclean, aes(x = GradRate))
 gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
-ggtitle("Figure (9) Graduation Rates Distribution")
+ggtitle("Graduation Rates Distribution")
 ```
 <br>
 <br>
@@ -233,7 +235,7 @@ And whereas **E:Enrollment** is an interaction variable that allows the effect o
 Regression results are presented in Figure (10). The different models, or rather the different dependent variables used, are displayed in separate columns.
 
 
-```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 
 library(stargazer)
 
@@ -250,7 +252,7 @@ None of the other models, which use test scores as the student outcome/dependent
 In order to explore what is driving the association between districts with elected superintendents and graduation rates, it may be helpful to start with a basic bivariate model and then add control variables one at a time. Table 6 presents the results of such a model. 
 
 
-```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 
 library(stargazer)
 
@@ -258,11 +260,26 @@ stargazer(one, two, three, four, five, type = 'latex', header = FALSE, title = "
 
 ```
 
-```{r, results='asis', echo=FALSE}
+```{r, results='asis', echo=FALSE, cache=TRUE}
 par(mfrow=c(1,2))
 plot(simZ1)
-plot(simZ2)
+title("Predicted Values for \nAppointed Districts")
+plot(simZ2, xlim=c(1,60), ylim = c(60,80))
+title("Predicted Values for \nElected Districts")
 
+```
+
+```{r, echo=FALSE, results='asis', cache=TRUE}
+library(knitr)
+
+
+Selection.Method <- c("Appointed", "Elected","Appointed", "Elected", "Appointed", "Elected")
+Data <- c("Full Sampe", "Full Sampe", "Districts with Less than 2,000 Students","Districts with Less than 2,000 Students", "Districts with less Than 1,100 Students", "Districts with less Than 1,100 Students")
+Average.Graduation.Rates <- c("73.34", "73.46", "73.91", "71.88", "73.02", "63.87")
+Sample.Size <- c("73","65","39","25", "20", "8")
+datatable2 <- data.frame(Selection.Method, Data, Average.Graduation.Rates, Sample.Size)
+
+knitr:kable(datatable2)
 ```
 
 # References

@@ -282,7 +282,7 @@ setZ2 <- setx(Z1, Enrolled100s = 2:140, EA10 = 1)
 simZ2 <- sim(Z1, x = setZ2)
 
 
-smalldistricts <- subset(completeclean, Enrolled100s < 50)
+smalldistricts <- subset(completeclean, Enrolled100s < 20)
 
 smallfit <- lm(GradRate ~ EA10 + Enrolled100s + EA10*Enrolled100s
                + PovertyPct + StudentTeacherRatio, data = smalldistricts)
@@ -331,7 +331,25 @@ qplot(CompositeScore, Enrolled100s, data=simpleappointed) + stat_smooth(method= 
 qplot(StudentTeacherRatio, GradRate, data=completeclean) + stat_smooth(method = 'lm')
 qplot(StudentTeacherRatio, GradRate, data=simpleappointed) + stat_smooth(method = 'lm')
 
+small <- qplot(Enrolled100s, GradRate, data=smalldistricts, color = factor(AorE))
+small
+
+small2 <- ddply(smalldistricts, "AorE", summarise, mean=mean(GradRate))
+
+reallysmall <- subset(smalldistricts, Enrolled100s <11)
+qplot(Enrolled100s, GradRate, data=reallysmall, color = factor(AorE))
+reallysmall2 <- ddply(reallysmall, "AorE", summarise, mean=mean(GradRate))
+
+fullsample <- ddply(completeclean, "AorE", summarise, sum=sum(AorE == "Elected"))
+small2 <- ddply(smalldistricts, "AorE", summarise, sum=sum(AorE == "Elected"))
+reallysmall2 <- ddply(reallysmall, "AorE", summarise, sum=sum(AorE == "Elected"))
+
+
+count if AorE == "Appointed"
 
 write.csv(completeclean, file = "cleanddata.csv")
 write.csv(simpleappointed, file = "appointed.csv")
 write.csv(simpleelected, file = "elected.csv")
+
+attach(completeclean)
+sorted <- completeclean[order(Enrolled100s),]
