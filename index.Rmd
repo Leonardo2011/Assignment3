@@ -2,17 +2,14 @@
 title: "Untitled"
 author: "Owen"
 date: "December 11, 2014"
-output: html_document
+output: 
+  html_document:
+    fig_width: 8
+    fig_height: 5
 ---
 
-#Background Information 
+#Interactive Map
 
-<div class="centered">
-63 of Mississippi's 151 Dis
-</div>
-
-
-# Interactive Map
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,3 +86,5 @@ html, body, #googft-mapCanvas {
   <div id="googft-mapCanvas"></div>
 </body>
 </html>
+
+63 of Mississippi's 151 District Superintendents Are Elected 
