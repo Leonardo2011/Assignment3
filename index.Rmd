@@ -15,7 +15,13 @@ This is a map
 65 of Mississippi's 151 School Superintendents Are Elected (~43%)
 </div>
 
-You can also embed plots, for example:
+<div class="centered">
+![MississippiMap](https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/SchoolDis.png)
+</div>
+
+<div class="centered">
+65 of Mississippi's 151 School Superintendents Are Elected (~43%)
+</div>
 
 ```{r, echo=FALSE}
 plot(cars)
