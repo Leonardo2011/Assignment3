@@ -5,13 +5,15 @@ date: "December 11, 2014"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This is a map
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+<div class="centered">
+![MississippiMap1](https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/SchoolDistrict.jpeg)
+</div>
 
-```{r}
-summary(cars)
-```
+<div class="centered">
+65 of Mississippi's 151 School Superintendents Are Elected (~43%)
+</div>
 
 You can also embed plots, for example:
 
