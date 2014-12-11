@@ -5,23 +5,12 @@ date: "December 11, 2014"
 output: html_document
 ---
 
-This is a map
+#Background Information 
 
 <div class="centered">
-![MississippiMap1](https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/AllDistricts.jpg)
+63 of Mississippi's 151 Dis
 </div>
 
-<div class="centered">
-65 of Mississippi's 151 School Superintendents Are Elected (~43%)
-</div>
-
-<div class="centered">
-![MississippiMap](https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/SchoolDis.png)
-</div>
-
-<div class="centered">
-65 of Mississippi's 151 School Superintendents Are Elected (~43%)
-</div>
 
 # Interactive Map
 <!DOCTYPE html>
