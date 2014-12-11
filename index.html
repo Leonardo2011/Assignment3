@@ -72,6 +72,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div class="centered">
 65 of Mississippi’s 151 School Superintendents Are Elected (~43%)
 </div>
+<div id="interactive-map" class="section level1">
+<h1>Interactive Map</h1>
 <!DOCTYPE html>
 <html>
 <head>
@@ -81,10 +83,10 @@ Appointed vs Elected Superintendents.shp - Google Fusion Tables
 </title>
 <style type="text/css">
 html, body, #googft-mapCanvas {
-  height: 500px;
+  height: 300px;
   margin: 0;
   padding: 0;
-  width: 400px;
+  width: 500px;
 }
 </style>
 <script src="data:text/javascript; charset=UTF-8,%0A%0Awindow%2Egoogle%20%3D%20window%2Egoogle%20%7C%7C%20%7B%7D%3B%0Agoogle%2Emaps%20%3D%20google%2Emaps%20%7C%7C%20%7B%7D%3B%0A%28function%28%29%20%7B%0A%20%20%0A%20%20function%20getScript%28src%29%20%7B%0A%20%20%20%20document%2Ewrite%28%27%3C%27%20%2B%20%27script%20src%3D%22%27%20%2B%20src%20%2B%20%27%22%3E%3C%27%20%2B%20%27%2Fscript%3E%27%29%3B%0A%20%20%7D%0A%20%20%0A%20%20var%20modules%20%3D%20google%2Emaps%2Emodules%20%3D%20%7B%7D%3B%0A%20%20google%2Emaps%2E%5F%5Fgjsload%5F%5F%20%3D%20function%28name%2C%20text%29%20%7B%0A%20%20%20%20modules%5Bname%5D%20%3D%20text%3B%0A%20%20%7D%3B%0A%20%20%0A%20%20google%2Emaps%2ELoad%20%3D%20function%28apiLoad%29%20%7B%0A%20%20%20%20delete%20google%2Emaps%2ELoad%3B%0A%20%20%20%20apiLoad%28%5B0%2E009999999776482582%2C%5B%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fvt%3Flyrs%3Dm%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fvt%3Flyrs%3Dm%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C%22m%40283000000%22%2C%5B%22https%3A%2F%2Fmts0%2Egoogle%2Ecom%2Fvt%3Flyrs%3Dm%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogle%2Ecom%2Fvt%3Flyrs%3Dm%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fkhms0%2Egoogleapis%2Ecom%2Fkh%3Fv%3D163%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fkhms1%2Egoogleapis%2Ecom%2Fkh%3Fv%3D163%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%2Cnull%2Cnull%2Cnull%2C1%2C%22163%22%2C%5B%22https%3A%2F%2Fkhms0%2Egoogle%2Ecom%2Fkh%3Fv%3D163%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fkhms1%2Egoogle%2Ecom%2Fkh%3Fv%3D163%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fvt%3Flyrs%3Dh%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fvt%3Flyrs%3Dh%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C%22h%40283000000%22%2C%5B%22https%3A%2F%2Fmts0%2Egoogle%2Ecom%2Fvt%3Flyrs%3Dh%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogle%2Ecom%2Fvt%3Flyrs%3Dh%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fvt%3Flyrs%3Dt%40132%2Cr%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fvt%3Flyrs%3Dt%40132%2Cr%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C%22t%40132%2Cr%40283000000%22%2C%5B%22https%3A%2F%2Fmts0%2Egoogle%2Ecom%2Fvt%3Flyrs%3Dt%40132%2Cr%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogle%2Ecom%2Fvt%3Flyrs%3Dt%40132%2Cr%40283000000%5Cu0026src%3Dapi%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%5D%2Cnull%2Cnull%2C%5B%5B%22https%3A%2F%2Fcbks0%2Egoogleapis%2Ecom%2Fcbk%3F%22%2C%22https%3A%2F%2Fcbks1%2Egoogleapis%2Ecom%2Fcbk%3F%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fkhms0%2Egoogleapis%2Ecom%2Fkh%3Fv%3D84%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fkhms1%2Egoogleapis%2Ecom%2Fkh%3Fv%3D84%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%2Cnull%2Cnull%2Cnull%2Cnull%2C%2284%22%2C%5B%22https%3A%2F%2Fkhms0%2Egoogle%2Ecom%2Fkh%3Fv%3D84%5Cu0026hl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fkhms1%2Egoogle%2Ecom%2Fkh%3Fv%3D84%5Cu0026hl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fmapslt%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fmapslt%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fmapslt%2Fft%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fmapslt%2Fft%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fvt%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fvt%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fmapslt%2Floom%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fmapslt%2Floom%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fmapslt%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fmapslt%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fmapslt%2Fft%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fmapslt%2Fft%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fmapslt%2Floom%3Fhl%3Den%2DUS%5Cu0026%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fmapslt%2Floom%3Fhl%3Den%2DUS%5Cu0026%22%5D%5D%5D%2C%5B%22en%2DUS%22%2C%22US%22%2Cnull%2C0%2Cnull%2Cnull%2C%22https%3A%2F%2Fmaps%2Egstatic%2Ecom%2Fmapfiles%2F%22%2C%22https%3A%2F%2Fcsi%2Egstatic%2Ecom%22%2C%22https%3A%2F%2Fmaps%2Egoogleapis%2Ecom%22%2C%22https%3A%2F%2Fmaps%2Egoogleapis%2Ecom%22%2Cnull%2C%22https%3A%2F%2Fmaps%2Egoogle%2Ecom%22%5D%2C%5B%22https%3A%2F%2Fmaps%2Egstatic%2Ecom%2Fmaps%2Dapi%2Dv3%2Fapi%2Fjs%2F18%2F17%22%2C%223%2E18%2E17%22%5D%2C%5B1067833192%5D%2C1%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%22%22%2Cnull%2Cnull%2C1%2C%22https%3A%2F%2Fkhms%2Egoogleapis%2Ecom%2Fmz%3Fv%3D163%5Cu0026%22%2Cnull%2C%22https%3A%2F%2Fearthbuilder%2Egoogleapis%2Ecom%22%2C%22https%3A%2F%2Fearthbuilder%2Egoogleapis%2Ecom%22%2Cnull%2C%22https%3A%2F%2Fmts%2Egoogleapis%2Ecom%2Fvt%2Ficon%22%2C%5B%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fvt%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fvt%22%5D%2C%5B%22https%3A%2F%2Fmts0%2Egoogleapis%2Ecom%2Fvt%22%2C%22https%3A%2F%2Fmts1%2Egoogleapis%2Ecom%2Fvt%22%5D%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2Cnull%2C%5B%22https%3A%2F%2Fmts0%2Egoogle%2Ecom%2Fvt%22%2C%22https%3A%2F%2Fmts1%2Egoogle%2Ecom%2Fvt%22%5D%2C%22%2Fmaps%2Fvt%22%2C283000000%2C132%5D%2C2%2C500%2C%5B%22https%3A%2F%2Fgeo0%2Eggpht%2Ecom%2Fcbk%22%2C%22https%3A%2F%2Fg0%2Egstatic%2Ecom%2Flandmark%2Ftour%22%2C%22https%3A%2F%2Fg0%2Egstatic%2Ecom%2Flandmark%2Fconfig%22%2C%22%22%2C%22https%3A%2F%2Fwww%2Egoogle%2Ecom%2Fmaps%2Fpreview%2Flog204%22%2C%22%22%2C%22https%3A%2F%2Fstatic%2Epanoramio%2Ecom%2Estorage%2Egoogleapis%2Ecom%2Fphotos%2F%22%2C%5B%22https%3A%2F%2Fgeo0%2Eggpht%2Ecom%2Fcbk%22%2C%22https%3A%2F%2Fgeo1%2Eggpht%2Ecom%2Fcbk%22%2C%22https%3A%2F%2Fgeo2%2Eggpht%2Ecom%2Fcbk%22%2C%22https%3A%2F%2Fgeo3%2Eggpht%2Ecom%2Fcbk%22%5D%5D%2C%5B%22https%3A%2F%2Fwww%2Egoogle%2Ecom%2Fmaps%2Fapi%2Fjs%2Fmaster%3Fpb%3D%211m2%211u18%212s17%212sen%2DUS%213sUS%214s18%2F17%22%2C%22https%3A%2F%2Fwww%2Egoogle%2Ecom%2Fmaps%2Fapi%2Fjs%2Fwidget%3Fpb%3D%211m2%211u18%212s17%212sen%2DUS%22%5D%2C0%2C0%5D%2C%20loadScriptTime%29%3B%0A%20%20%7D%3B%0A%20%20var%20loadScriptTime%20%3D%20%28new%20Date%29%2EgetTime%28%29%3B%0A%20%20getScript%28%22https%3A%2F%2Fmaps%2Egstatic%2Ecom%2Fmaps%2Dapi%2Dv3%2Fapi%2Fjs%2F18%2F17%2Fmain%2Ejs%22%29%3B%0A%7D%29%28%29%3B%0A" type="text/javascript"></script>
@@ -98,11 +100,11 @@ html, body, #googft-mapCanvas {
       viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
     }
     var mapDiv = document.getElementById('googft-mapCanvas');
-    mapDiv.style.width = isMobile ? '100%' : '400px';
-    mapDiv.style.height = isMobile ? '100%' : '500px';
+    mapDiv.style.width = isMobile ? '100%' : '500px';
+    mapDiv.style.height = isMobile ? '100%' : '300px';
     var map = new google.maps.Map(mapDiv, {
       center: new google.maps.LatLng(32.701036216558855, -88.09666434375004),
-      zoom: 7,
+      zoom: 6,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('googft-legend-open'));
@@ -149,6 +151,7 @@ html, body, #googft-mapCanvas {
 </div>
 </body>
 </html>
+</div>
 
 
 </div>

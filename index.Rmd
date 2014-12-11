@@ -23,6 +23,7 @@ This is a map
 65 of Mississippi's 151 School Superintendents Are Elected (~43%)
 </div>
 
+# Interactive Map
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,10 +31,10 @@ This is a map
 <title>Appointed vs Elected Superintendents.shp - Google Fusion Tables</title>
 <style type="text/css">
 html, body, #googft-mapCanvas {
-  height: 500px;
+  height: 300px;
   margin: 0;
   padding: 0;
-  width: 400px;
+  width: 500px;
 }
 </style>
 
@@ -49,11 +50,11 @@ html, body, #googft-mapCanvas {
       viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
     }
     var mapDiv = document.getElementById('googft-mapCanvas');
-    mapDiv.style.width = isMobile ? '100%' : '400px';
-    mapDiv.style.height = isMobile ? '100%' : '500px';
+    mapDiv.style.width = isMobile ? '100%' : '500px';
+    mapDiv.style.height = isMobile ? '100%' : '300px';
     var map = new google.maps.Map(mapDiv, {
       center: new google.maps.LatLng(32.701036216558855, -88.09666434375004),
-      zoom: 7,
+      zoom: 6,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     });
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('googft-legend-open'));
