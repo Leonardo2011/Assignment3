@@ -235,11 +235,11 @@ And whereas **E:Enrollment** is an interaction variable that allows the effect o
 Regression results are presented in Figure (10). The different models, or rather the different dependent variables used, are displayed in separate columns.
 
 
-```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=FALSE}
 
 library(stargazer)
 
-stargazer::stargazer(newgradfit2, newmeanfit, newalg, newbio, newenglish, newhistory, type ='latex', title = "Regression Results", font.size = 'tiny', header = FALSE,
+stargazer::stargazer(newgradfit, newmeanfit, newalg, newbio, newenglish, newhistory, type ='latex', title = "Regression Results", font.size = 'tiny', header = FALSE,
 covariate.labels=c("Elected Superintendent", "Number of Students Enrolled \n(in 100s)", "Percentage of Students in Poverty", "Student-to-Teacher Ratio", "Elected:Number of Students Enrolled \n(in 100s)"), omit.stat=c("f", "rsq", "ser"), 
 digits = 2)
 
@@ -269,17 +269,15 @@ title("Predicted Values for \nElected Districts")
 
 ```
 
-```{r, echo=FALSE, results='asis', cache=TRUE}
+```{r, echo=FALSE, results='asis', cache=FALSE}
+
+
+Appointed.Grad.Rates <- c("73.34% (n=73)", "73.91% (n=39)", "73.02% (n=20)")
+Elected.Grad.Rates <- c("73.46% (n=65)", "71.88% (n=25)",  "63.87% (n=8)")
+Data.Description <- c("Full Sample", "Districts with Less than 2,000 Students", "Districts with Less than 1,100 Students")
+datatable2 <- data.frame(Appointed.Grad.Rates, Elected.Grad.Rates, Data.Description)
 library(knitr)
-
-
-Selection.Method <- c("Appointed", "Elected","Appointed", "Elected", "Appointed", "Elected")
-Data <- c("Full Sampe", "Full Sampe", "Districts with Less than 2,000 Students","Districts with Less than 2,000 Students", "Districts with less Than 1,100 Students", "Districts with less Than 1,100 Students")
-Average.Graduation.Rates <- c("73.34", "73.46", "73.91", "71.88", "73.02", "63.87")
-Sample.Size <- c("73","65","39","25", "20", "8")
-datatable2 <- data.frame(Selection.Method, Data, Average.Graduation.Rates, Sample.Size)
-
-knitr:kable(datatable2)
+kable(datatable2, caption = "Gradution Rates by District Size", align = 'c')
 ```
 
 # References

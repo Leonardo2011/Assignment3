@@ -246,6 +246,8 @@ newenglish <- lm(English ~ EA10  + Enrolled100s + EA10*Enrolled100s +
 
 newhistory <- lm(History ~ EA10  + Enrolled100s + EA10*Enrolled100s + 
                    PovertyPct + StudentTeacherRatio, data = completeclean)
+summary(newgradfit)
+summary(newmeanfit)
 
 #Stepup model. Start with just selection method and move up until we have the full model
 one <- lm(GradRate ~ EA10, data = completeclean)
@@ -345,11 +347,9 @@ small2 <- ddply(smalldistricts, "AorE", summarise, sum=sum(AorE == "Elected"))
 reallysmall2 <- ddply(reallysmall, "AorE", summarise, sum=sum(AorE == "Elected"))
 
 
-count if AorE == "Appointed"
-
 write.csv(completeclean, file = "cleanddata.csv")
 write.csv(simpleappointed, file = "appointed.csv")
 write.csv(simpleelected, file = "elected.csv")
 
-attach(completeclean)
-sorted <- completeclean[order(Enrolled100s),]
+
+
