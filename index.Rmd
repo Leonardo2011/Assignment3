@@ -8,7 +8,7 @@ output: html_document
 This is a map
 
 <div class="centered">
-![MississippiMap1](https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/SchoolDistrict.jpeg)
+![MississippiMap1](https://github.com/Henryjean/Assignment3/blob/gh-pages/Presentation/AllDistricts.png)
 </div>
 
 <div class="centered">
