@@ -7,7 +7,7 @@ output:
     theme: readable
     highlight: zenburn
 ---
-<span style="color:white">The power of new ideas and innovation</span> <img align="middle" src="https://raw.githubusercontent.com/oliverbott/Final_Project/master/Website/Images/ImageBulb.jpg" /> <span style="color:white">Ideas to change the world</span>
+<span style="color:black">Does Superintendent Selection Method Matter?</span> <img align="middle" src="https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/header.jpg" /> <span style="color:white">Ideas to change the world</span>
 
 If you were in charge of searching for a new coach to lead the Manchester United Football Club, would you limit your search to only look for potential coaches that are from Manchester? Absolutely not. You'd look for the best canidate for the position regardless of where they came from. But in Mississippi School Districts this is exactly what is happening. 
 
