@@ -3,12 +3,17 @@ title: "Why Elect When You Can Appoint?"
 author: "Owen Phillips"
 output: 
   html_document:
+    theme: cosmo
+    highlight: kate
     fig_width: 8
     fig_height: 5
 ---
-<div class="centered">
-#Interactive Map
-</div>
+<span style="color:#2c7fb8">What's the Problem with Electing Superintendents?</span></div>
+
+If you were in charge of searching for a new coach to lead the Manchester United Football Club, would you limit your search to only look for potential coaches that are from Manchester? Absolutely not. You'd look for the best canidate for the position regardless of where they came from. But in Mississippi School Districts this is exactly what is happening. 
+
+<span style="color:#2c7fb8">Interactive Map</span></div>
+
 
 <!DOCTYPE html>
 <html>
@@ -18,7 +23,7 @@ output:
 <style type="text/css">
 html, body, #googft-mapCanvas {
   height: 300px;
-  margin: 0;
+  margin: 5;
   padding: 0;
   width: 500px;
 }
@@ -88,7 +93,7 @@ html, body, #googft-mapCanvas {
 </html>
 
 <div class="centered">
-##### 63 of Mississippi's 151 District Superintendents Are Elected 
+<span style="color:#2c7fb8">63 of Mississippi's 151 District Superintendents Are Elected</span></div> 
 </div>
 
 ```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE, cache=FALSE}
@@ -130,8 +135,7 @@ ggtitle("Enrollment Size Distribution") + scale_fill_manual(values = c("#009966"
 ```{r, results='asis', echo=FALSE, warning=FALSE}
 
 library(stargazer)
-stargazer(newgradfit2, type ='html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty", "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"))
-summary(newgradfit2)
+stargazer(newgradfit, newmeanfit, newalg, newbio, newenglish, newhistory, type ='html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty", "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"))
 
 ```
 
@@ -139,7 +143,7 @@ summary(newgradfit2)
 
 ```{r, results='asis', echo=FALSE, warning=FALSE}
 
-stargazer(one, two, three, four, five, type = 'html', table.layout = "#tn", covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), column.labels = "Graduation Rates")
+stargazer(one, two, three, four, five, type = 'html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), column.labels = "Graduation Rates", omit.stat=c("f", "rsq", "ser"), digits = 2)
 
 
 ```
