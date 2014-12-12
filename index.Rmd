@@ -1,14 +1,14 @@
 ---
-title: "Untitled"
-author: "Owen"
-date: "December 11, 2014"
+title: "Why Elect When You Can Appoint?"
+author: "Owen Phillips"
 output: 
   html_document:
     fig_width: 8
     fig_height: 5
 ---
-
+<div class="centered">
 #Interactive Map
+</div>
 
 <!DOCTYPE html>
 <html>
@@ -87,4 +87,68 @@ html, body, #googft-mapCanvas {
 </body>
 </html>
 
-63 of Mississippi's 151 District Superintendents Are Elected 
+<div class="centered">
+##### 63 of Mississippi's 151 District Superintendents Are Elected 
+</div>
+
+```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE, cache=FALSE}
+library(devtools)
+SourceURL <- ("https://raw.githubusercontent.com/Henryjean/Assignment3/master/DataAnalysis.R")
+source_url(SourceURL)
+```
+
+## Test Score Distributions {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+way <- ggplot(submelted, aes(value, color = factor(AorE)))
+way + geom_density(aes(fill = factor(AorE)), alpha = .55) + facet_wrap(~ variable) + 
+ggtitle("SATP Test Score Distributions") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + scale_color_manual(values = c("#009966", "#D1322D"))
+```
+
+## Graduation Rate Distributions {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+gradrate <- ggplot(completeclean, aes(x = GradRate))
+gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
+ggtitle("Graduation Rates Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
+```
+
+## Poverty Rate Distributions {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+poverty <- ggplot(completeclean, aes(x = PovertyPct))
+poverty + geom_density(aes(fill=factor(AorE)), alpha = .75) + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + ggtitle("Poverty Rates Distribution")
+```
+
+
+## Enrollment Size Distributions {.flexbox .vcenter}
+```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center'}
+EnrollmentDis <- ggplot(completeclean, aes(x = Enrolled100s))
+EnrollmentDis + geom_density(aes(fill=factor(AorE)), alpha =.65) +
+ggtitle("Enrollment Size Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
+```
+
+## Regression Output {.flexbox .vcenter}
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+library(stargazer)
+stargazer(newgradfit2, type ='html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty", "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"))
+summary(newgradfit2)
+
+```
+
+## Modeling Graduation Rates 
+
+```{r, results='asis', echo=FALSE, warning=FALSE}
+
+stargazer(one, two, three, four, five, type = 'html', table.layout = "#tn", covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), column.labels = "Graduation Rates")
+
+
+```
+
+```{r, results='asis', echo=FALSE, cache=TRUE}
+par(mfrow=c(1,2))
+plot(simZ1)
+title("Predicted Values for \nAppointed Districts")
+plot(simZ2, xlim=c(1,60), ylim = c(60,80))
+title("Predicted Values for \nElected Districts")
+
+```
