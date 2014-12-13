@@ -4,149 +4,118 @@ author: "Owen Phillips"
 date: "December 12, 2014"
 output:
   html_document:
-    theme: readable
+    theme: cerulean
     highlight: zenburn
 ---
-<span style="color:black">Does Superintendent Selection Method Matter?</span> <img align="middle" src="https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/header.jpg" /> <span style="color:white">Ideas to change the world</span>
+<p style='text-align: center;'>
+<img align="center" src="https://raw.githubusercontent.com/Henryjean/Assignment3/master/Presentation/header.jpg" /> 
+</p>
 
-If you were in charge of searching for a new coach to lead the Manchester United Football Club, would you limit your search to only look for potential coaches that are from Manchester? Absolutely not. You'd look for the best canidate for the position regardless of where they came from. But in Mississippi School Districts this is exactly what is happening. 
-
-Strangely enough, Mississippi is one of the only states in the country that elects a porition of their district superintendents. Of the 150 or so elected superintendents throughout the country, 63 of them are in Mississippi. 
-
-Below is an interactive map that shows the 151 different school districts in Mississippi. The districts colored red are ones that elect their superintendent, while the one's colored green appoint their superintendent. 
-
-<span style="color:#2c7fb8">Interactive Map</span></div>
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport"></meta>
-<title>Appointed vs Elected Superintendents.shp - Google Fusion Tables</title>
-<style type="text/css">
-html, body, #googft-mapCanvas {
-  height: 300px;
-  margin: 0 auto;
-  padding: 0;
-  width: 500px;
-}
-</style>
-
-<script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false&amp;v=3"></script>
-
-<script type="text/javascript">
-  function initialize() {
-    google.maps.visualRefresh = true;
-    var isMobile = (navigator.userAgent.toLowerCase().indexOf('android') > -1) ||
-      (navigator.userAgent.match(/(iPod|iPhone|iPad|BlackBerry|Windows Phone|iemobile)/));
-    if (isMobile) {
-      var viewport = document.querySelector("meta[name=viewport]");
-      viewport.setAttribute('content', 'initial-scale=1.0, user-scalable=no');
-    }
-    var mapDiv = document.getElementById('googft-mapCanvas');
-    mapDiv.style.width = isMobile ? '100%' : '500px';
-    mapDiv.style.height = isMobile ? '100%' : '300px';
-    var map = new google.maps.Map(mapDiv, {
-      center: new google.maps.LatLng(32.701036216558855, -88.09666434375004),
-      zoom: 6,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('googft-legend-open'));
-    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(document.getElementById('googft-legend'));
-
-    layer = new google.maps.FusionTablesLayer({
-      map: map,
-      heatmap: { enabled: false },
-      query: {
-        select: "col0",
-        from: "1dIFW9UPwZDq3nr79brLQBE0B-mwhapX8TIo7tu0",
-        where: ""
-      },
-      options: {
-        styleId: 4,
-        templateId: 2
-      }
-    });
-
-    if (isMobile) {
-      var legend = document.getElementById('googft-legend');
-      var legendOpenButton = document.getElementById('googft-legend-open');
-      var legendCloseButton = document.getElementById('googft-legend-close');
-      legend.style.display = 'none';
-      legendOpenButton.style.display = 'block';
-      legendCloseButton.style.display = 'block';
-      legendOpenButton.onclick = function() {
-        legend.style.display = 'block';
-        legendOpenButton.style.display = 'none';
-      }
-      legendCloseButton.onclick = function() {
-        legend.style.display = 'none';
-        legendOpenButton.style.display = 'block';
-      }
-    }
-  }
-
-  google.maps.event.addDomListener(window, 'load', initialize);
-</script>
-</head>
-
-<body>
-  <div id="googft-mapCanvas"></div>
-</body>
-</html>
-</div>
-
-<p style='text-align: center;'>(63 of Mississippi's 151 Superintendents Are Elected - 43%)</p>
-
-```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE, cache=FALSE}
+```{r, echo=FALSE, results='asis', warning=FALSE, error=FALSE, message=FALSE, cache=TRUE}
 library(devtools)
 SourceURL <- ("https://raw.githubusercontent.com/Henryjean/Assignment3/master/DataAnalysis.R")
 source_url(SourceURL)
 ```
+<br>
+<br>
+If you were in charge of searching for a new coach to lead the Manchester United Football Club, would you limit your search to only Manchester? Absolutely not. You'd look for the best canidate for the position regardless of where they came from. But in Mississippi School Districts this is exactly what is happening. 
 
-## Test Score Distributions {.flexbox .vcenter}
+Mississippi is one of the only states in the country that elects a portion of their district superintendents. Of the 150 or so elected superintendents in the U.S., 63 are in Mississippi. 
+
+Below is an interactive map that shows the 151 different school districts in Mississippi. The districts colored red are ones that elect their superintendent and the ones colored green appoint their superintendent. 
+
+
+<p style='text-align: center;'>Interactive Map</p>
+
+<p style='text-align: center;'>
+<iframe width="550" height="300" scrolling="no" frameborder="no" src="https://www.google.com/fusiontables/embedviz?q=select+col0+from+1dIFW9UPwZDq3nr79brLQBE0B-mwhapX8TIo7tu0&amp;viz=MAP&amp;h=false&amp;lat=32.701036216558855&amp;lng=-88.09666434375004&amp;t=1&amp;z=6&amp;l=col0&amp;y=4&amp;tmplt=2&amp;hml=GEOCODABLE"></iframe>
+</p>
+<p style='text-align: center;'>(*63 of Mississippi's 151 Superintendents Are Elected - 43%*)</p>
+
+Supporters of appointed superintendents argue that elections narrow the pool of talent to choose from due to a restriction that candidates running for election must reside within the district itself. Meanwhile, in school districts where superintendents are appointed, the school boards can recruit qualified candidates from different districts or even different states. This is especially important in a state like Mississippi where in some small school districts there may not be many qualified candidates, and those that are qualified may not be interested in campaigning. 
+
+According to the Mississippi Secretary of State’s [website](http://www.sos.ms.gov/Elections-Voting/Pages/Election-Results-By-Year.aspx), during the 2011 elections there were 13 different districts out of a total of 63 that had uncontested races for superintendent. In the previous elections of 2007, another 20 elections were uncontested, and in one district, no one ran at all. 
+
+<h1 style='color:#5F9EA0'>Why the Difference?</h1>
+<br>
+Of Mississippi’s 151 school superintendents, 63 must face an election every four years, while the remaining superintendents are appointed to four-year terms. The only difference separating districts that appoint versus those that elect are the way the school districts are defined. Elected superintendents come from districts shaped by county borders. While appointed superintendents are from districts that are either separate from county borders or have been consolidated from two separate districts to form one. Primarily, appointed superintendents serve in school districts that are shaped by municipality borders (think Jackson Public Schools). 
+
+<h1 style='color:#5F9EA0'>How Different Are the Districts in Terms of Student Outcomes?</h1>
+<br>
+On paper, the two types of districts look about the same. Average graduation rates in appointed and elected districts are nearly identical (73.3% and 73.5%, respectively). The same is true for average state test scores. Below are a series of density graphs that show that for the most part, districts with appointed and elected school superintendents are indistinguishable. 
+
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 way <- ggplot(submelted, aes(value, color = factor(AorE)))
 way + geom_density(aes(fill = factor(AorE)), alpha = .55) + facet_wrap(~ variable) + 
 ggtitle("SATP Test Score Distributions") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + scale_color_manual(values = c("#009966", "#D1322D"))
 ```
 
-## Graduation Rate Distributions {.flexbox .vcenter}
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 gradrate <- ggplot(completeclean, aes(x = GradRate))
 gradrate + geom_density(aes(fill=factor(AorE)), alpha =.75) +
 ggtitle("Graduation Rates Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
 ```
+<br>
 
-## Poverty Rate Distributions {.flexbox .vcenter}
+<h1 style='color:#5F9EA0'>What About Other Characteristics?</h1>
+<br>
+Although student outcomes appear to be the same in two types of districts, there are other characteristics which distinguish the two. Many of the districts with appointed superintendents are in urban areas and thus have higher average poverty rates than in elected districts (36.9% versus 33.2%, respectively). Additionally, the districts with appointed superintendents tend to have fewer students enrolled in their schools (2,310 versus 3,180, respectively). Below are two graphs that depict the  differences in perecentage of students living in poverty and enrollment in the two types of districts. 
+
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 poverty <- ggplot(completeclean, aes(x = PovertyPct))
 poverty + geom_density(aes(fill=factor(AorE)), alpha = .75) + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank()) + ggtitle("Poverty Rates Distribution")
 ```
 
-
-## Enrollment Size Distributions {.flexbox .vcenter}
 ```{r, results='asis', echo=FALSE, warning=FALSE, fig.align='center', cache=TRUE}
 EnrollmentDis <- ggplot(completeclean, aes(x = Enrolled100s))
 EnrollmentDis + geom_density(aes(fill=factor(AorE)), alpha =.65) +
 ggtitle("Enrollment Size Distribution") + scale_fill_manual(values = c("#009966", "#D1322D")) + theme(legend.title=element_blank())
 ```
+<br>
 
-## Regression Output {.flexbox .vcenter}
-```{r, results='asis', echo=FALSE, warning=FALSE, cache=TRUE}
+The effect of enrollment is incredibly important. To be qualified to campaign for superintendent in an elected distirct, the canidate has to come from the district itself. Therefore, districts with very low population will have a much tougher time finding a qualified superintendent compared to districts with a higher populations. 
 
-library(stargazer)
-stargazer(newgradfit, newmeanfit, newalg, newbio, newenglish, newhistory, type ='html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty", "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"))
+Below is table of average graduation rates in the two types of districts based on different enrollment cut-offs. 
 
+```{r, echo=FALSE, results='asis', cache=FALSE}
+
+
+Appointed.Grad.Rates <- c("73.34% (n=73)", "73.91% (n=39)", "73.02% (n=20)")
+Elected.Grad.Rates <- c("73.46% (n=65)", "71.88% (n=25)",  "63.87% (n=8)")
+Data.Description <- c("Full Sample", "Districts with Less than 2,000 Students", "Districts with Less than 1,100 Students")
+datatable2 <- data.frame(Appointed.Grad.Rates, Elected.Grad.Rates, Data.Description)
+library(knitr)
+kable(datatable2, caption = "Gradution Rates by District Size", align = 'c')
 ```
 
-## Modeling Graduation Rates {.flexbox .vcenter}
-```{r, results='asis', echo=FALSE, warning=FALSE, cache=TRUE}
+For districts with less than 2,000 students (n= 64), the average graduation rate in appointed districts is ~74%, meanwhile it is ~71.8% in elected districts. In districts with less than 1,100 students (n = 28), the average graduation rate in appointed districts is 73% - hardly any different. However, in elected districts with less than 1,100 students, the average graduation drops to 63.8% - a noticeable change. Admittedly, there are only eight districts with less than 1,100 students and an elected superintendent so the sample is not large. 
 
-stargazer(one, two, three, four, five, type = 'html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), column.labels = "Graduation Rates", omit.stat=c("f", "rsq", "ser"), digits = 2)
+<h1 style='color:#5F9EA0'>How To Make an Apples to Apples Comparison</h1>
+<br>
+To make an accurate comparision of student outcomes in the two types of districts, one would have to take into consideration that the two types of districts are fundamentally different. Districts with appointed superintendents tend to be a bit poorer and smaller on average compared to districts with elected superintendents. To make an apples to apples comparison I used multiple regression analysis to find out if there are significant differences in student outcomes for school districts that have appointed or elected superintendents after controlling for demographic and socioeconomic differences.  
+
+Below is a simple linear regression model that predicts average **Student Outcome** (Graduation Rate) after controlling for: whether the district has an appointed or elected superintendent (**E**), enrollment size (**Enrollment**), perecentage of students living in poverty (**PovertyPct**), student-to-teacher ratio (**STR** ), and an interaction between enrollment and whether the district has an appointed or elected superintendent (**E:Enrollment**). 
+
+$$ Student Outcome_{i} = {\beta}_0 + {\beta}_1 E{i} + {\beta}_2 Enrollment{i} + {\beta}_3 Poverty Pct{i} + {\beta}_4 STR{i} + {\beta}_5 E:Enrollment{i} + {\epsilon}_{i}$$ 
+
+If having an elected superintendent resulted in poorer student outcomes, we'd expect the sign on **E** to be negative. Furthemore, if having a limited talent pool to choose a superintendent from had an effect on student outcomes we'd expect a positive sign on **E:Enrollment** (As enrollment increases in elected districts, the average graduation rate increases). 
+
+Below is the regression output. 
+
+```{r, results='asis', echo=FALSE, warning=FALSE, cache=TRUE, fig.align='center'}
+
+stargazer(one, two, three, four, five, type = 'html', covariate.labels=c("Elected Superintendent", "Pct Students in Poverty",  "Student-to-Teacher Ratio", "Enrollment", "Elected:Enrollment"), omit.stat=c("f", "rsq", "ser"), digits = 2)
 
 
 ```
-# Bootstraps {.flexbox .vcenter}
+<br>
+
+According to the regression results in the full model (column 5), districts with elected superintendents are associated with graduation rates 4.3 percentage points lower (nearly half a standard deviation) than in districts with appointed superintendents even after controlling for district enrollment, poverty levels, and the student-to-teacher ratio. The p-value on this coefficient is 0.06, meaning that the point estimate is significant at the 90% level. However, with the positive coefficient on “Elected:Total Number of Students Enrolled” the negative association between having an elected superintendent on graduation rates diminishes as district enrollment increases. 
+
+These results indicate that A) **having an elected superintendent is associated with lower average graduation rates**; and B) **small districts with elected superintendents do the worst of all**. 
+
+To further illustrate the negative assoication between average graduation rates and having an elected superintendent it may be helpful to plot predicted average graduation rates for the two types of districts based on a range of different enrollment sizes. Below are two graphs that show the predicted average graduation rates for districts with appointed and elected superintendents that range in enrollment size from 0 students to 6,000 students.  
+
 ```{r, results='asis', echo=FALSE, cache=TRUE}
 par(mfrow=c(1,2))
 plot(simZ1)
@@ -155,3 +124,12 @@ plot(simZ2, xlim=c(1,60), ylim = c(60,80))
 title("Predicted Values for \nElected Districts")
 
 ```
+<br>
+When enrollment size is small (less than ~2,000 students), predicted average graduation rates tend to be much higher in districts with appointed superintendents than in districts with elected superintendents. But as enrollment increases, the difference in predicted average graduation rates effectively disappears.
+<br>
+<h1 style='color:#5F9EA0'>So What Does This All Mean?</h1>
+<br>
+In summary, districts with elected superintendents are associated with graduation rates 4.3 percentage points lower compared to districts with appointed superintendents after controlling for difference in enrollment, poverty, and student-to-teacher ratio. Furthermore, this difference is largest when enrollment size is smallest. Meaning, the more limited the talent pool to choose a qualified superintendent from, the lower the average student outcome. 
+
+Policy makers in Mississippi should take into consideration that small districts that elect their superintendent are depriving themselves of the opportunity of having the most qualified person for the job. Intelligent policy would allow these small districts to look for canidates outside the district itself. Catching the biggest fish in the pond might seem remarkable, but if the pond is barely bigger than a puddle you might reconsider how remarkable that feat actually is. 
+

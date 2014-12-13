@@ -8,6 +8,7 @@ epicalc
 foreign
 ggmap
 ggplot2
+googleVis
 knitr
 maptools
 MASS
